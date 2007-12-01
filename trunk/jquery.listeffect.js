@@ -1,21 +1,26 @@
 /**
  *
 **/
-
+(function($) {
+/**
+ *
+**/
 jQuery.fn.listeffect = function() {
-	var noNumber = $(this).prev().text();
-	var thislink = $(this).attr('class');
-		$("." + thislink  + "").prev().addClass("link_" + thislink  + "").append("(" + $("." + thislink  + " li").length + ")").fadeTo('fast', 0.67);
-		$("." + thislink  + "").hide();
-		$(".link_" + thislink  + "").toggle(function() {
-			$("." + thislink  + "").fadeIn('normal', function() {
-				$(".link_" + thislink  + "").fadeTo('fast', 0.89);
+		var noNumber = this.prev().text();
+		var thisLink = this.attr('class');
+		$("." + thisLink  + "").prev().addClass("link_" + thisLink  + "").append("(" + $("." + thisLink  + " > li").length + ")").fadeTo('fast', 0.67);
+		$("." + thisLink  + "").hide();
+		$(".link_" + thisLink  + "").toggle(function() {
+			$("." + thisLink  + "").fadeIn('normal', function() {
+				$(".link_" + thisLink  + "").fadeTo('fast', 0.89);
 			});
-			$("." + thislink  + "").prev().text(noNumber);
+			$("." + thisLink  + "").prev().text(noNumber);
 		}, function() {
-			$("." + thislink  + "").fadeOut('normal', function() {
-				$("." + thislink  + "").prev().append("(" + $("." + thislink  + " li").length + ")");
+			$("." + thisLink  + "").fadeOut('normal', function() {
+				$("." + thisLink  + "").prev().append("(" + $("." + thisLink  + " > li").length + ")");
 			});
-			$(".link_" + thislink  + "").fadeTo('normal', 0.66);
+			$(".link_" + thisLink  + "").fadeTo('normal', 0.66);
 		});
 };
+
+})(jQuery);
