@@ -3,7 +3,7 @@
 {
     "name" : "article",
 	"atts" : [
-			{"att" : "customfieldname" , "type" : "value" , "desc" : "Restrict to articles with specified value for specified custom field name. Replace "customfieldname" with the name of the custom field." } ,
+			{"att" : "customfieldname" , "type" : "value" , "desc" : "Restrict to articles with specified value for specified custom field name. Value is the name of the custom field." } ,
 			{"att" : "keywords" , "type" : "keyword(s)" , "desc" : "Restrict to articles with specified keyword(s)."  } ,
 			{"att" : "status" , "type" : "status" , "desc" : "Restrict to articles with specified status. Available values: draft, hidden, pending, live, sticky. Default is live."  } ,
 			{"att" : "time" , "type" : "time" , "desc" : "Restrict to articles posted within specified timeframe. Available values: past, future, or any (both past and future). Default is past."  } ,
@@ -13,7 +13,7 @@
 			{"att" : "pageby" , "type" : "integer" , "desc" : "The number of articles to jump forward or back when an older or newer link is clicked. Allows you to call the article tag several times on a page without messing up older/newer links. Default value matches the value assigned to limit."  } ,
 			{"att" : "pgonly" , "type" : "boolean" , "desc" : "Do the article count, but do no display anything. Used when you want to show a search result count, or article navigation tags before the list of articles. Just Make sure that, other than pgonly, both article tags are identical (form-related attributes are the exception, they do not need to be assigned). Default is 0 (no)."  } ,
 			{"att" : "allowoverride" , "type" : "boolean" , "desc" : "Whether to use override forms for the generated article list. Default is 1 (yes)."  } ,
-			{"att" : "searchsticky" , "type" : "boolean" , "desc" : "When outputting search results, include articles with status "sticky". Default is 0 (no)."  } ,
+			{"att" : "searchsticky" , "type" : "boolean" , "desc" : "When outputting search results, include articles with status sticky. Default is 0 (no)."  } ,
 			{"att" : "form" , "type" : "form name" , "desc" : "Use specified form. Default is default."  } ,
 			{"att" : "listform" , "type" : "form name" , "desc" : "Use specified form when page is displaying an article list."  } ,
 			{"att" : "searchform" , "type" : "form name" , "desc" : "The form to be used for your customized search results output. Default is: search_results."  }
