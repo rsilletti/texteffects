@@ -29,16 +29,29 @@
 {
     "name" : "article_custom",
 	"atts" : [
-			{"att" : " " , "type" : " " , "desc" : " "  } ,
-			{"att" : " " , "type" : " " , "desc" : " "  }
+			{"att" : "id" , "type" : "article ID number" , "desc" : "Display specific article."  } ,
+			{"att" : "customfieldname" , "type" : "value" , "desc" : "Restrict to articles with specified value for specified custom field name. Value is the name of the custom field." } ,
+			{"att" : "section" , "type" : "section name" , "desc" : "Restrict to articles from specified sections. Default is unset, retrieves from all sections. "  } ,
+			{"att" : "category" , "type" : "category name" , "desc" : "Restrict to articles from specified category. Default is unset, retrieves from all categories. "  } ,
+			{"att" : "keywords" , "type" : "keyword(s)" , "desc" : "Restrict to articles with specified keyword(s)."  } ,
+			{"att" : "excerpted" , "value" : "section name" , "desc" : "Restrict to articles with/without an excerpt. Available values: y (yes, return only those containing an excerpt) or n (no, return all). Default is n (no, return all)."  } ,
+			{"att" : "status" , "type" : "status" , "desc" : "Restrict to articles with specified status. Available values: draft, hidden, pending, live, sticky. Default is live."  } ,
+			{"att" : "time" , "type" : "time" , "desc" : "Restrict to articles posted within specified timeframe. Available values: past, future, or any (both past and future). Default is past."  } ,
+			{"att" : "month" , "type" : "yyyy-mm" , "desc" : "Restrict to articles posted within the specified month. Default is unset."  } ,
+			{"att" : "author" , "type" : "author`s name" , "desc" : "Restrict to articles by specified author. Default is unset. "  } ,
+			{"att" : "sort" , "type" : "sort value(s)" , "desc" : "How to sort resulting list. Available values: ID (article id#), AuthorID (author), LastMod (date last modified), LastModID (author of last modification), Posted (date posted), Title, Category1, Category2, comments_count, Status, Section, Keywords, Image (article image id#), url_title, custom_1 through custom_10, rand() (random). When viewing a search results list, score (how well the search terms match the article) is an additional value available. Default value is Posted desc (score desc for search results)."  } ,
+			{"att" : "offset" , "type" : "integer" , "desc" : "The number of articles to skip. Default is 0."  } ,
+			{"att" : "limit" , "type" : "integer" , "desc" : "The number of articles to display. Default is 10."  } ,
+			{"att" : "allowoverride" , "type" : "boolean" , "desc" : "Whether to use override forms for the generated article list. Default is 1 (yes)."  } ,
+			{"att" : "form" , "type" : "form name" , "desc" : "Use specified form. Default is default."  } ,
 			] ,
-	"tag_type" : " " , 
-	"context" :  {" " : " " , " " : " " } ,
+	"tag_type" : "Single" , 
+	"context" : "Page Template" ,
 	"links" : [
 			{" " : " " } ,
 			{" " : " " }
 			] ,
-	"comments" : " "		
+	"comments" : "Unlike <Txp:article_/>, article_custom will always return an article list, and is not context-sensitive. This means that, while <Txp:article_/> can only see posts within the currently viewed section/category/author, etc, article_custom can see all posts from all sections, categories and authors, unless you restrict it via attributes (see below), and that context-sensitive navigation tags, such as <txp:older> and <txp:newer>, will not work."		
 }
 	]
 }
