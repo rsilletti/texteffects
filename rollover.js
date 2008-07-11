@@ -11,16 +11,16 @@
  *
  * @example  destination link initial setting : <p id="rollover_dest">&nbsp;</p>
  *
- * @example  first source link : <a href="mysite.com" class="rollover_src" name="My Site Info" title="Home">My Link</a>
+ * @example  first source link : <a href="mysite.com" class="rollover_src" title="My Site Info">My Link</a>
  * @result  html : <p id="rollover_dest">My Site Info</p> on mouseover <p id="rollover_dest">Thanks for dropping by!</p> on mouseout.
  *
- * @example  second source link : <a href="exitlink.com" class="rollover_src" name="Alternate Site Info" title="Aternate">Alternate Site</a>
+ * @example  second source link : <a href="exitlink.com" class="rollover_src" title="Alternate Site Info">Alternate Site</a>
  * @result  html : <p id="rollover_dest">Alternate Site Info</p> on mouseover <p id="rollover_dest">Thanks for dropping by!</p> on mouseout.
 **/
 
 $(document).ready(function() {
 	$(".rollover_src").hover(function(){
-		$("#rollover_dest").html($(this).attr("name"));
+		$("#rollover_dest").html($(this).attr("title"));
 		},function(){
 		$("#rollover_dest").html("Thanks for dropping by!");
 	});
