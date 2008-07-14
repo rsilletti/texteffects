@@ -32,7 +32,7 @@ function ras_poll_prefs() {
    		edit_poll_form(gps('poll_id')); 
     	break;
 		case 'delete_select':
-   		ras_delete_poll(gps('poll_id'));
+   		ras_poll_delete(gps('poll_id'));
     	break;
 		case '' : poll_list();
 	}
@@ -81,9 +81,6 @@ function ras_poll_db() {
 			 n9='".$n9."'
 		 ");
 	break;
-	case 'delete_poll':
-		safe_delete('txp_poll' , $where);
-	break;
   }
 		 
 	poll_list();
@@ -92,25 +89,52 @@ function ras_poll_db() {
 
 // Displays a list of available polls as a default page
 
-function poll_list() {
+	function poll_list()
+	{
+	  		  $where ="1 = 1 order by id desc ";
+			  $rs = safe_rows_start('*' , 'txp_poll' , $where);	
+	    echo n.'<div style="margin: .3em auto auto auto; text-align: center;">';
+		echo n.'<h3>Select a poll to edit or delete. </h3><p><a href="?event=poll_prefs&step=new_select" >'.poll_gTxt('add_new_poll').'</a>.</p><br />';  
+		echo n.n.startTable('list');
 
-  $where ="1 = 1 order by id desc ";
-          $result = safe_rows_start('*' , 'txp_poll' , $where);
-		  $out = '<div style="margin: 3em auto auto auto; text-align: center;">';
-		  $out .= '<h3>Select a poll to edit or delete, or <a href="?event=poll_prefs&step=new_select" >'.poll_gTxt('add_new_poll').'</a>.</h3>';
-		  $out .= '<table id="list">';
-		  $out .= '<tr><th><strong>ID</strong></th><th> <strong>Name</strong></th><th> <strong>Prompt </strong></th><th> <strong>Options</strong></th></tr>';
-	while($row = nextRow($result))
-          {
- 			$out .= '<tr><td>'.$row['id'].':</td><td> <b>'.$row['name'].'</b></td><td> '.$row['prompt'].'</td> 
-			<td>&raquo; <a href="?event=poll_prefs&poll_id='.$row['id'].'&step=edit_select" >'.poll_gTxt('edit_poll').'</a> | 
-			<a href="?event=poll_prefs&poll_id='.$row['id'].'&step=delete_select" >'.poll_gTxt('delete_poll').'</a></td>
-			</tr>';
-         }
-		 $out .= '</table>';
-		 $out .= '</div>';
-	echo $out;
-}
+		if ($rs and numRows($rs) > 0)
+		{
+			echo assHead('id', 'name', poll_gTxt('poll_prompt') ,poll_gTxt('active_fields'), 'edit', 'delete', '', '');
+
+			while ($a = nextRow($rs))
+			{
+				foreach ($a as $key => $value) {
+					$$key = htmlspecialchars($value);
+				}
+				// Fix up the description for clean cases ??
+				$prompt = preg_replace(array('#&lt;br /&gt;#',
+												  '#&lt;(/?(a|b|i|em|strong))&gt;#',
+												  '#&lt;a href=&quot;(https?|\.|\/|ftp)([A-Za-z0-9:/?.=_]+?)&quot;&gt;#'),
+											array('<br />','<$1>','<a href="$1$2">'),
+											$prompt);
+
+				echo tr(
+
+					n.td($id).
+					td($name).
+					td($prompt).
+					td('').
+
+					td(
+					eLink('poll_prefs', 'edit_select', 'poll_id', $id, gTxt('edit'))
+					).
+
+					td(
+						dLink('poll_prefs', 'delete_select', 'poll_id', $id)
+					,30)
+				);
+			}
+		}
+				unset($name, $page, $deletelink);
+				
+		echo endTable();
+	    echo '</div>';
+	}
 
 // Create a new poll form
 
@@ -274,31 +298,13 @@ function edit_poll_form($poll_id) {
 		);
 	}
 
-// Inline delete prompt and step/event inputs
+// delete selected poll
 	
-function ras_delete_poll($poll_id) {
+function ras_poll_delete($poll_id) {
 
-						$where = "id='".$poll_id."'";
-						$row = safe_row('*', 'txp_poll', $where );
-		echo form(
-			hed(poll_gTxt('permanent_delete_poll').'<p><a href="?event=poll_prefs" >'.poll_gTxt('do_not_delete').'</a></p>', 3,' style="margin-top: 2em; text-align: center;"').
-			'<br /><div style="margin: 3em 13em; text-align: left;">'.
-			
-				'<dl>
-				<dt>'.gTxt('id').'</dt>
-				<dd><strong>'.$row['id'].'</strong></dd>
-				<dt>'.poll_gTxt('poll_name').'</dt>
-				<dd><strong>'.$row['name'].'</strong></dd>
-				<dt>'.poll_gTxt('poll_prompt').'</dt>
-				<dd><strong>'.$row['prompt'].'</strong></dd>
-				<dl><hr />'.
-				
-					fInput('submit', '', gTxt('delete'), 'publish').
-			'</div>'.
-			hInput('poll_id', $row['id']).
-			eInput('poll_db').
-			sInput('delete_poll')
-		);
+				$where = "id='".$poll_id."'";
+				safe_delete('txp_poll' , $where);
+            poll_list();
 }
 
 //********************************//
@@ -309,7 +315,7 @@ function ras_poll($atts, $thing =NULL) {
 
 		extract(lAtts(array(
 			'poll_id'   => '1',
-			'controltag'=> 'p', 
+			'controltag'=> 'fieldset', 
 			'labeltag'=> 'h3',
 			'prompttag'=> 'p',
 			'controlbreak'=> 'br',
@@ -321,7 +327,9 @@ function ras_poll($atts, $thing =NULL) {
 			$where = "id='".$poll_id."'";
 			$this_poll = safe_row('id,name,prompt', 'txp_poll', $where );
 			$poll_bits = safe_row('n0,n1,n2,n3,n4,n5,n6,n7,n8,n9', 'txp_poll', $where );
-			
+			if(empty($this_poll)) {
+				return '';
+			};
 			$form = n.'<'.$labeltag.' class="'.$class.'" >'.$this_poll['name'].'</'.$labeltag.'>'.n.' <'.$prompttag.' class="'.$prompt_class.'">'. $this_poll['prompt'].'</'.$prompttag.'>'.n;
 			
 		$out = '<div id="poll">';
@@ -459,6 +467,7 @@ function poll_gTxt($what, $atts = array()) {
 		'do_not_delete'            => 'Don`t delete this poll',
 		'do_not_save'              => 'Don`t save this poll',
 		'do_not_edit'              => 'Don`t edit this poll',
+		'active_fields'              => 'Active fields',
 	);
 
 	return strtr($lang[$what], $atts);
