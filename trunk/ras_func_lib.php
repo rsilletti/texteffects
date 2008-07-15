@@ -97,33 +97,46 @@ function is_http($text)   { $VLD = new VLD($text); return $VLD->http; }
 			'cache' => '',
 			'class' => __FUNCTION__
 		),$atts));
-                $result = safe_rows_start('name,author,author_uri,version', 'txp_plugin', "status = 1 order by $sort");
-					while($a = nextRow($result)) {
-					$out = $a['name'] . '&nbsp;&nbsp;';
-						if(!$link) {
-							$out .= $a['author'] . '&nbsp;&nbsp;';
-							  } else {
-								if (is_http($a['author_uri']))     // Look for leading "http" 
-								{
+		
+        $result = safe_rows_start('name,author,author_uri,version', 'txp_plugin', "status = 1 order by $sort");
+		
+		while($a = nextRow($result)) {
+		
+		$out = $a['name'] . '&nbsp;&nbsp;';
+		
+		if(!$link) {
+		$out .= $a['author'] . '&nbsp;&nbsp;';
+		} 
+		else {
+							 // Look for leading "http" 
+						if (is_http($a['author_uri']))  
+							{
 								 $out .= href($a['author'] , $a['author_uri']) . '&nbsp;&nbsp;';
-								} 
-								elseif(is_mailto($a['author_uri'])) // Look for leading "mailto" 
-								{ 
+							} 
+							// Look for leading "mailto" 
+						elseif(is_mailto($a['author_uri']))
+						    { 
 								 $out .= href($a['author'] , $a['author_uri']) . '&nbsp;&nbsp;';
-								}
-								elseif(is_email($a['author_uri'])) // Look for "@" and "." in text and append "mailto:" on true
-								{
+							}
+							// Look for "@" and "." in text and append "mailto:" on true
+						elseif(is_email($a['author_uri'])) 
+						    {
 								 $out .= href($a['author'] , 'mailto:' .$a['author_uri']) . '&nbsp;&nbsp;';
-								} else {       // Prepend "http://" to unclassified text as default	
+							} 
+							// Prepend "http://" to unclassified text as default	
+		                else 
+							{              
 								 $out .= href($a['author'] , 'http://' .$a['author_uri']) . '&nbsp;&nbsp;'; 
-								}
 							}
-						if($ver) {
-							$out .= 'Version&nbsp;' . $a['version'];
-							}
-					$line[] = $out;
-					}
-		if($cache){ // shamelessly appropriated from load_plugins
+		}
+		if($ver) {
+			$out .= 'Version&nbsp;' . $a['version'];
+		}
+		    $line[] = $out;
+		}
+		// shamelessly appropriated from load_plugins
+		
+		if($cache) { 
 					$line[] = "<br />Current Cache Files";
 		if (!empty($prefs['plugin_cache_dir'])) {
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
@@ -138,6 +151,7 @@ function is_http($text)   { $VLD = new VLD($text); return $VLD->http; }
 		}
 	}
 				if($line)
+				
 		return doLabel($label, $labeltag) . doWrap($line, $wraptag, $break, $class,$breakclass,'','', $id); 
 	}
 
