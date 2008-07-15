@@ -99,29 +99,21 @@ function ras_poll_db() {
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo assHead('id', 'name', poll_gTxt('poll_prompt') ,poll_gTxt('active_fields'), 'edit', 'delete', '', '');
+			echo assHead('id', 'name', poll_gTxt('poll_prompt') , 'edit', 'delete', '', '');
 
 			while ($a = nextRow($rs))
 			{
 				foreach ($a as $key => $value) {
 					$$key = htmlspecialchars($value);
 				}
-				// Fix up the description for clean cases ??
-				$prompt = preg_replace(array('#&lt;br /&gt;#',
-												  '#&lt;(/?(a|b|i|em|strong))&gt;#',
-												  '#&lt;a href=&quot;(https?|\.|\/|ftp)([A-Za-z0-9:/?.=_]+?)&quot;&gt;#'),
-											array('<br />','<$1>','<a href="$1$2">'),
-											$prompt);
-
 				echo tr(
 
 					n.td($id).
 					td($name).
 					td($prompt).
-					td('').
 
 					td(
-					eLink('poll_prefs', 'edit_select', 'poll_id', $id, gTxt('edit'))
+					eLink('poll_prefs', 'edit_select', 'poll_id', $id, gTxt('edit').'&nbsp;&rsaquo;&nbsp;'.$name)
 					).
 
 					td(
@@ -321,7 +313,7 @@ function ras_poll($atts, $thing =NULL) {
 			'controlbreak'=> 'br',
 			'control_class'=> 'ras_poll_control',
 			'prompt_class'=> 'ras_poll_prompt',
-			'class'     => __FUNCTION__
+			'form_id'     => __FUNCTION__
 		), $atts));
 		
 			$where = "id='".$poll_id."'";
@@ -367,7 +359,6 @@ function ras_poll($atts, $thing =NULL) {
 		
 		$out .= '</div>';
 		
-	echo dmp($_POST);	
 return $out;
 }
 
@@ -384,10 +375,6 @@ function ras_submit_db () {
 					$newstat = $current + 1;
 					$what = $stat.'='.$newstat;
 				safe_update('txp_poll', $what ,$where);
-		echo dmp($selection);
-		echo dmp($stat);
-		echo dmp($current);
-		echo dmp($newstat);
 		}
 }
 
@@ -467,7 +454,7 @@ function poll_gTxt($what, $atts = array()) {
 		'do_not_delete'            => 'Don`t delete this poll',
 		'do_not_save'              => 'Don`t save this poll',
 		'do_not_edit'              => 'Don`t edit this poll',
-		'active_fields'              => 'Active fields',
+		'active_fields'            => 'Active fields'
 	);
 
 	return strtr($lang[$what], $atts);
