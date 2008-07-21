@@ -6,6 +6,41 @@
 
 //-------------------------------------------------------------------------
 
+function ras_author_list ($atts, $thing = NULL) {
+
+		extract(lAtts(array(
+			'break'        => br,
+			'form'         => '',
+			'label'        => '',
+			'labeltag'     => '',
+			'sort'         => 'AuthorId desc',
+			'wraptag'      => '',
+			'class'        => __FUNCTION__
+		), $atts));
+		
+ 		 $sort = doSlash($sort);
+		
+		 $where = " 1 order by ".$sort."";
+		
+		 $rs = array_unique(safe_column('AuthorId', 'textpattern', $where));
+		 
+  			foreach($rs as $row) 
+			{
+ 				$where = "name='".$row."'";
+				 $title = safe_field('RealName', 'txp_users', $where);
+				$out[] = tag($title, 'a', ' href="'.site_url().'author/'.urlencode($title).'/"');
+		    }
+	
+		if ($out) 
+			{
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+			}
+			
+ return '' ;
+}
+
+//-------------------------------------------------------------------------
+
 function ras_if_category_type($atts,$thing)
 	{
 	global $c;

@@ -26,13 +26,13 @@ function ras_poll_prefs() {
 			
 	switch (gps('step')) {
 		case 'new_select':
-   		new_poll_form();  
+   		ras_new_select();  
    		break;
 		case 'edit_select':
-   		edit_poll_form(gps('poll_id')); 
+   		ras_edit_select(gps('poll_id')); 
     	break;
 		case 'delete_select':
-   		ras_poll_delete(gps('poll_id'));
+   		ras_delete_select(gps('poll_id'));
     	break;
 		case '' : poll_list();
 	}
@@ -117,7 +117,7 @@ function ras_poll_db() {
 					).
 
 					td(
-						dLink('poll_prefs', 'delete_select', 'poll_id', $id)
+				    dLink('poll_prefs', 'delete_select', 'poll_id', $id)
 					,30)
 				);
 			}
@@ -130,7 +130,7 @@ function ras_poll_db() {
 
 // Create a new poll form
 
-function new_poll_form() {
+function ras_new_select() {
 			
 		echo form(
 			hed(poll_gTxt('add_new_poll').'<p><a href="?event=poll_prefs" >'.poll_gTxt('do_not_save').'</a></p>', 3,' style="margin-top: 2em; text-align: center;"').
@@ -208,7 +208,7 @@ function new_poll_form() {
 
 // Edit an exsisting poll form
 	
-function edit_poll_form($poll_id) {	
+function ras_edit_select($poll_id) {	
 	 
 						$where = "id='".$poll_id."'";
 						$row = safe_row('*', 'txp_poll', $where );
@@ -292,7 +292,7 @@ function edit_poll_form($poll_id) {
 
 // delete selected poll
 	
-function ras_poll_delete($poll_id) {
+function ras_delete_select($poll_id) {
 
 				$where = "id='".$poll_id."'";
 				safe_delete('txp_poll' , $where);
