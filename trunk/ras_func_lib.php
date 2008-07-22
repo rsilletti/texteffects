@@ -15,6 +15,8 @@ function ras_author_list ($atts, $thing = NULL) {
 			'labeltag'     => '',
 			'sort'         => 'AuthorId desc',
 			'wraptag'      => '',
+			'id'           => '',
+			'breakclass'   => '',
 			'class'        => __FUNCTION__
 		), $atts));
 		
@@ -33,7 +35,7 @@ function ras_author_list ($atts, $thing = NULL) {
 	
 		if ($out) 
 			{
-				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class,$breakclass,'','', $id);
 			}
 			
  return '' ;
