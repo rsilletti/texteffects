@@ -28,7 +28,7 @@ function ras_author_list ($atts, $thing = NULL) {
 			{
  				$where = "name='".$row."'";
 				 $title = safe_field('RealName', 'txp_users', $where);
-				$out[] = tag($title, 'a', ' href="'.site_url().'author/'.urlencode($title).'/"');
+				$out[] = tag($title, 'a', ' href="'.site_url(NULL).'author/'.urlencode($title).'/"');
 		    }
 	
 		if ($out) 
