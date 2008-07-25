@@ -8,9 +8,12 @@
 			'array_name'        => NULL,
 			'element'           => NULL,
 		), $atts));
+		
 		$array_name = 'ras_'.$array_name ;
 		return $array_name($element); 
  }
+ 
+ //------------------------------------------------------------------------------
  
 	function ras_thisarticle($element)  { 
 		global $thisarticle;
@@ -72,6 +75,34 @@
 		}
 	}
 
+//--------------------------------------------------------------------------------
+
+	function ras_thiscomment($element)  { 
+		global $thiscomment;
+		
+		$available_elements = array(
+  			'discussid',
+  			'parentid',
+  			'name',
+  			'email',
+  			'web',
+  			'ip',
+  			'posted',
+  			'message',
+  			'visible',
+  			'time'
+		);
+		
+		if (!in_array($element, $available_elements))
+		{
+			return ' element not an array member ';
+			
+		} else {
+		 
+			return $thiscomment[$element]; 
+		}
+	}
+
 //---------------------------------------------------------------------------------
 
 	function ras_thislink($element)  { 
@@ -123,8 +154,8 @@
 			return $thisfile[$element]; 
 		}
 	}
-//----------------------------------------------------------------------------------
 
+//----------------------------------------------------------------------------------
 
 	function ras_prefs($element)  { 
 		global $prefs;
@@ -221,7 +252,6 @@
   		'textile_updated',
   		'title_no_widow',
   		'lastmod_keepalive',
-	    'upm_image_load_scrip',
   		'enable_xmlrpc_server'
 		);
 		
@@ -234,9 +264,7 @@
 			return $prefs[$element]; 
 		}
 	}
-//---------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
 
 	function ras_pretext($element)  { 
 		global $pretext;
