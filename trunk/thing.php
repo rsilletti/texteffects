@@ -2,16 +2,27 @@
 
 //--------------------------------------------------------------------------------
 
-    function ras_thing($atts)  {
+    function ras_thing($atts, $thing = NULL)  {
 	 
 	 		extract(lAtts(array(
 			'array_name'        => NULL,
 			'element'           => NULL,
 		), $atts));
 		
-		$array_name = 'ras_'.$array_name ;
-		return $array_name($element); 
- }
+		if(!$thing)  $thing = 'ras_'.$array_name ; 
+		
+		  if(is_callable($thing))
+		   
+		  {
+		  	 return $thing($element);
+		  } 
+		  
+		  else 
+		  	{
+		  
+				 return ''; 
+			 }
+ 	}
  
  //------------------------------------------------------------------------------
  
