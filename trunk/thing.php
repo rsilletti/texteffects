@@ -9,19 +9,21 @@
 			'element'           => NULL,
 		), $atts));
 		
-		if(!$thing)  $thing = 'ras_'.$array_name ; 
-		
-		  if(is_callable($thing))
-		   
+		  $thing = 'ras_'.$thing;
+
+		  $array_name = 'ras_'.$array_name ; 		 
+		  
+		 if(is_callable($thing))		   
 		  {
-		  	 return $thing($element);
-		  } 
+		  	 return $thing();			 
+		  }
 		  
-		  else 
-		  	{
+		if(is_callable($array_name))		   
+		  {
+		  	 return $array_name($element);			 
+		  }
 		  
-				 return ''; 
-			 }
+		 return ''; 
  	}
  
  //------------------------------------------------------------------------------
@@ -314,5 +316,11 @@
 		}
 	}
 
+//--------------------------------------------------------------------------------
+
+	function ras_permlink_mode()  { 
+		global $permlink_mode;
+		return $permlink_mode;		
+	}
 
 ?>
