@@ -1,15 +1,18 @@
 <?php
 
 //--------------------------------------------------------------------------------
+// Array values called by array name as text (no leading $) and elemnet as text --
+//--------------------------------------------------------------------------------
+// Attributes are array_name & element for self closing tags ---------------------
 
-    function ras_thing($atts, $thing = NULL)  {
+    function ras_thing($atts, $thing = NULL)  { // The tag definition
 	 
 	 		extract(lAtts(array(
 			'array_name'        => NULL,
 			'element'           => NULL,
 		), $atts));
 		
-		  $thing = 'ras_'.$thing;
+		  $thing = trim('ras_'.$thing);
 
 		  $array_name = 'ras_'.$array_name ; 		 
 		  
@@ -26,6 +29,8 @@
 		 return ''; 
  	}
  
+ //------------------------------------------------------------------------------
+ // Available arrays list --------------------------------------------------------
  //------------------------------------------------------------------------------
  
 	function ras_thisarticle($element)  { 
@@ -318,9 +323,58 @@
 
 //--------------------------------------------------------------------------------
 
-	function ras_permlink_mode()  { 
-		global $permlink_mode;
-		return $permlink_mode;		
+	function ras_thissection($element)  { 
+		global $thissection;
+		
+		$available_elements = array(
+			'name',
+			'title'
+		);
+		
+		if (!in_array($element, $available_elements))
+		{
+			return ' element not an array member ';
+			
+		} else {
+		 
+			return $thissection[$element]; 
+		}	
 	}
+
+//---------------------------------------------------------------------------------
+	
+	function ras_thiscategory($element)  { 
+		global $thiscategory;
+		
+		$available_elements = array(
+			'name',
+			'title',
+			'type'
+		);
+		
+		if (!in_array($element, $available_elements))
+		{
+			return ' element not an array member ';
+			
+		} else {
+		 
+			return $thiscategory[$element]; 
+		}	
+	}
+
+//--------------------------------------------------------------------------------
+// Functions list, to add your own and make thier value accessable via ras_thing, 
+// alias it by prefixing ras_ to the variable name as the function name. 
+// Render your variable global and return it as the function return value.
+//------------------------------- Thus -------------------------------------------
+
+
+	function ras_microstart()
+	{
+		global $microstart;
+		return $microstart;
+	}
+	
+// Tags this way: <txp:ras_thing>microstart</txp:ras_thing>  //
 
 ?>
