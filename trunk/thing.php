@@ -1,7 +1,7 @@
 <?php
 
 //--------------------------------------------------------------------------------
-// Array values called by array name as text (no leading $) and elemnet as text --
+// Array values called by array name as text (no leading $) and element as text --
 //--------------------------------------------------------------------------------
 // Attributes are array_name & element for self closing tags ---------------------
 
