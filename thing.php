@@ -328,7 +328,9 @@
 		
 		$available_elements = array(
 			'name',
-			'title'
+			'title',
+			'is_first',
+			'is_last'
 		);
 		
 		if (!in_array($element, $available_elements))
@@ -349,7 +351,9 @@
 		$available_elements = array(
 			'name',
 			'title',
-			'type'
+			'type',
+			'is_first',
+			'is_last'
 		);
 		
 		if (!in_array($element, $available_elements))
