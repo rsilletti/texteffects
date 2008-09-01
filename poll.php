@@ -122,7 +122,6 @@ function ras_poll_db() {
 				);
 			}
 		}
-				unset($name, $page, $deletelink);
 				
 		echo endTable();
 	    echo '</div>';
