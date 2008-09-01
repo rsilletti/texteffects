@@ -4,41 +4,6 @@
 // These functions will collide with plugin functions of the same name //
 //---------------------------------------------------------------------//
 
-//----------------Experimental!-----------------------------------
-
-function ras_author_list ($atts) {
-
-		extract(lAtts(array(
-			'break'        => br,
-			'label'        => '',
-			'labeltag'     => '',
-			'sort'         => 'AuthorId desc',
-			'wraptag'      => '',
-			'id'           => '',
-			'breakclass'   => '',
-			'class'        => __FUNCTION__
-		), $atts));
-		
- 		 $sort = doSlash($sort);
-		
-		 $where = " 1 order by ".$sort."";
-		
-		 $rs = array_unique(safe_column('AuthorId', 'textpattern', $where));
-
-  			foreach($rs as $row) 
-				{
- 				$where = "name='".$row."'";
-				 $title = safe_field('RealName', 'txp_users', $where);
-				$out[] = tag($title, 'a', ' href="'.site_url(NULL).'author/'.urlencode($title).'/"');
-				}
-
-			if ($out) 
-			{
-				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class,$breakclass,'','', $id);
-			}
-			
- return '' ;
-}
 
 //-------------------------------------------------------------------------
 
