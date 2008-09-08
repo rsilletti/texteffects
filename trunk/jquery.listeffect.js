@@ -5,7 +5,7 @@
 *   http://www.gnu.org/licenses/gpl.html
 *
 **/
-(function($) {
+;(function($) {
 /**
  * Provides a list effect that collapses the list and appends the number of list items to the remaining label.
  * Assumes that list items will be wrapped in a list break tag such as <li>.
