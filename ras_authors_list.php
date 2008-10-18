@@ -93,7 +93,7 @@ function mod_authors_list ($atts, $thing = NULL)
 		 $rs = safe_column('user_id', 'txp_users', $where);
 
 		 $section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
-		 
+
 		 	$out = array();
 			$count = 0;
 			$last = count($rs);
@@ -121,12 +121,12 @@ function mod_authors_list ($atts, $thing = NULL)
 				
 				if(in_array($author_priv , $privs))
 				{
-						$author_name = safe_field('RealName', 'txp_users', $where); // A bit clunky
-					    $author_id = safe_field('name', 'txp_users', $where);
-						$thisauthor = array('realname' => $author_name, 'name' => $author_id);
+					extract($author_info = safe_row('RealName as Rname, name as Uname', 'txp_users', $where));
+						$thisauthor = array('realname' => $Rname, 'name' => $Uname);
 						$thisauthor['is_first'] = ($count == 1);
 						$thisauthor['is_last'] = ($count == $last);
-					$out[] = ($thing) ? parse($thing) : parse_form($form);
+
+					 $out[] = ($thing) ? parse($thing) : parse_form($form);
 				}
 				
 				}
