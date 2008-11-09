@@ -18,52 +18,6 @@ function ras_if_category_type($atts,$thing)
 	return parse(EvalElse($thing, !empty($rs)));
 	}
 
-//---------------------------------------------------------------------------
-
-function ras_expiration_date($atts)
-{
-		global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
-
-		assert_article();
-
-		extract(lAtts(array(
-			'class'   => '',
-			'format'  => '',
-			'gmt'     => '',
-			'lang'    => '',
-			'wraptag' => '',
-		), $atts));
-
-		if ($format)
-		{
-			$out = safe_strftime($format, $thisarticle['expire'], $gmt, $lang);
-		}
-
-		else
-		{
-			if ($id or $c or $pg)
-			{
-				$out = safe_strftime($archive_dateformat, $thisarticle['expire']);
-			}
-
-			else
-			{
-				$out = safe_strftime($dateformat, $thisarticle['expire']);
-			}
-		}
-
-		return ($wraptag) ? doWrap($out, $wraptag, '', $class) : $out;
-}
-
-//-------------------------------------------------------------------------------
-
-function ras_if_expires($atts, $thing) 
-{
-global $thisarticle;
-return parse(EvalElse($thing, $thisarticle['expire'] != ''));
-
-}
-
 //--------------------------------------------------------------------------------
 
 class VLD // Link validation 
@@ -365,7 +319,93 @@ global $permlink_mode;
 		return parse(Evalelse($thing, strtotime($setdate) < $tz_date ));
 		} else { return parse(Evalelse($thing, strtotime($setdate) <= $tz_date )); }
 	}
+//-----------------------------------------------------------------------------
+
+	function ras_modified_today($atts,$thing)
+	{
+  		global $thisarticle;
+		extract(lAtts(array(
+			'setdate' => '',
+			'offset' => ''
+		),$atts));
+	$tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
+	$thedate = ($setdate) ? $setdate : date('Y-m-d' , mktime() + tz_offset() - ($offset * 86400));
+		 return parse(Evalelse($thing, strtotime($thedate) == $tz_date ));
+	}
 	
+//------------------------------------------------------------------------------
+
+	function ras_modified_before($atts,$thing)
+	{
+  		global $thisarticle;
+		extract(lAtts(array(
+		    'include_today' => '',
+			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
+		),$atts));
+	$tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
+	if(empty($include_today)) {
+		return parse(Evalelse($thing, strtotime($setdate) > $tz_date ));
+		} else { return parse(Evalelse($thing, strtotime($setdate) >= $tz_date )); }
+	}
+
+//------------------------------------------------------------------------------
+
+	function ras_modified_after($atts,$thing)
+	{
+  		global $thisarticle;
+		extract(lAtts(array(
+		    'include_today' => '',
+			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
+		),$atts));
+	$tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
+	if(empty($include_today)) {
+		return parse(Evalelse($thing, strtotime($setdate) < $tz_date ));
+		} else { return parse(Evalelse($thing, strtotime($setdate) <= $tz_date )); }
+	}
+//-----------------------------------------------------------------------------
+
+	function ras_expires_today($atts,$thing)
+	{
+  		global $thisarticle;
+		extract(lAtts(array(
+			'setdate' => '',
+			'offset' => ''
+		),$atts));
+	$tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
+	$thedate = ($setdate) ? $setdate : date('Y-m-d' , mktime() + tz_offset() - ($offset * 86400));
+		 return parse(Evalelse($thing, strtotime($thedate) == $tz_date ));
+	}
+	
+//------------------------------------------------------------------------------
+
+	function ras_expires_before($atts,$thing)
+	{
+  		global $thisarticle;
+		extract(lAtts(array(
+		    'include_today' => '',
+			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
+		),$atts));
+	$tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
+	if(empty($include_today)) {
+		return parse(Evalelse($thing, strtotime($setdate) > $tz_date ));
+		} else { return parse(Evalelse($thing, strtotime($setdate) >= $tz_date )); }
+	}
+
+//------------------------------------------------------------------------------
+
+	function ras_expires_after($atts,$thing)
+	{
+  		global $thisarticle;
+		extract(lAtts(array(
+		    'include_today' => '',
+			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
+		),$atts));
+	$tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
+	if(empty($include_today)) {
+		return parse(Evalelse($thing, strtotime($setdate) < $tz_date ));
+		} else { return parse(Evalelse($thing, strtotime($setdate) <= $tz_date )); }
+	}
+
 //-------------------------------------------------------------------------------
 
 	function ras_enable_articles($atts,$thing)
