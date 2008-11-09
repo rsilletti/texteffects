@@ -40,6 +40,7 @@
 			'thisid',
 			'posted',
 			'modified',
+			'expires',
 			'annotate',
 			'comments_invite',
 			'authorid',
