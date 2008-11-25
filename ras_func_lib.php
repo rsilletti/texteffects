@@ -4,6 +4,83 @@
 // These functions will collide with plugin functions of the same name //
 //---------------------------------------------------------------------//
 
+//---------------------------------------------------------------
+function ras_file_download_list($atts, $thing = NULL)
+	{
+		global $thisfile;
+
+		extract(lAtts(array(
+		    'id'       => '',
+			'break'    => br,
+			'category' => '',
+			'class'    => __FUNCTION__,
+			'form'     => 'files',
+			'label'    => '',
+			'labeltag' => '',
+			'limit'    => 10,
+			'offset'   => 0,
+			'sort'     => 'filename asc',
+			'wraptag'  => '',
+			'status'   => '4',
+		), $atts));
+
+		if (!is_numeric($status))
+			$status = getStatusNum($status);
+
+		$where = array('1=1');
+		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+		if ($status) $where[] = "status = '".doSlash($status)."'";
+
+		$qparts = array(
+			'order by '.doSlash($sort),
+			($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
+		);
+
+		$rs = safe_rows_start('*', 'txp_file', join(' and ', $where).' '.join(' ', $qparts));
+
+		if ($rs)
+		{
+			$out = array();
+
+			while ($a = nextRow($rs))
+			{
+				$thisfile = file_download_format_info($a);
+
+				$out[] = ($thing) ? parse($thing) : parse_form($form);
+
+				$thisfile = '';
+			}
+
+			if ($out)
+			{
+				if ($wraptag == 'ul' or $wraptag == 'ol')
+				{
+					return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+				}
+
+				return ($wraptag) ? tag(join($break, $out), $wraptag) : join(n, $out);
+			}
+		}
+		return '';
+	}
+
+//------------------------------------------------------------------------
+
+	function ras_if_download_id($atts, $thing)
+	{
+		global $thisfile;
+		assert_file();
+
+		extract(lAtts(array(
+			'id' => '',
+		), $atts));
+
+		if ($id)
+		{
+			return parse(EvalElse($thing, in_list($thisfile['id'], $id)));
+		}
+	}
 
 //-------------------------------------------------------------------------
 
@@ -11,11 +88,21 @@ function ras_if_category_type($atts,$thing)
 	{
 	global $c;
                 extract(lAtts(array(
-						 'type' => NULL
-                 ),$atts));  
-	$where = "name='".doSlash($c)."' and type='".doSlash($type)."'";
+						 'type' => NULL,
+						 'name' => $c
+                 ),$atts));
+	
+                 if($c != $name) 
+                      {
+                         return parse(EvalElse($thing, 0));
+                      } 
+                       else {
+				 	$c = doSlash($name);
+			      }
+  
+		$where = "name='".doSlash($c)."' and type='".doSlash($type)."'";
 		$rs = safe_row('*' , 'txp_category' , $where);
-	return parse(EvalElse($thing, !empty($rs)));
+	        return parse(EvalElse($thing, !empty($rs)));
 	}
 
 //--------------------------------------------------------------------------------
