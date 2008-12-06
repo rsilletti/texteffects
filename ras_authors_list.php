@@ -1,64 +1,6 @@
 <?php
 
-function ras_authors_list ($atts) 
-{
-		global $s;
-		extract(lAtts(array(
-			'break'        => br,
-			'label'        => '',
-			'labeltag'     => '',
-			'sort'         => 'user_id desc',
-			'wraptag'      => '',
-			'type'         => 'Publisher,Managing Editor,Copy Editor,Staff writer,Freelancer,Designer',
-			'section'      => '',
-			'this_section' => 0,
-			'class'        => __FUNCTION__
-		), $atts));
-		
-		 	foreach(do_list($type) as $num)
-				{
-				switch($num)
-					{
-					case 'Publisher' : $privs[] = 1; break;
-					case 'Managing Editor' : $privs[] = 2; break;
-					case 'Copy Editor' : $privs[] = 3; break;
-					case 'Staff writer' : $privs[] = 4; break;
-					case 'Freelancer' : $privs[] = 5; break;
-					case 'Designer' : $privs[] = 6; break;
-					}
-				}
-		
- 		 $sort = doSlash($sort);
-		
-		 $where = " 1 order by ".$sort."";
-		
-		 $rs = safe_column('user_id', 'txp_users', $where);
-
-		 $section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
-		 
-  		 foreach($rs as $row)
-		    {
- 				$where = "user_id='".$row."'";
-			    $author_priv = safe_field('privs', 'txp_users', $where);
-				
-				if(in_array($author_priv , $privs))
-				{
-					$author_name = safe_field('RealName', 'txp_users', $where);
-					$out[] = href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name)));
-				}
-		    }
-		  
-			if ($out)
-			{
-				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-			}
-
-		return '';
-}
-
-//------------------------------------- 4.0.7 model, use mod_author in place of core author tag --------------
-
-function mod_authors_list ($atts, $thing = NULL) 
+function ras_authors_list ($atts, $thing = NULL) 
 {
 		global $s, $thisauthor;
 		extract(lAtts(array(
@@ -66,6 +8,7 @@ function mod_authors_list ($atts, $thing = NULL)
 			'label'        => '',
 			'labeltag'     => '',
 			'sort'         => 'user_id desc',
+			'form'         => ''
 			'wraptag'      => '',
 			'type'         => 'Publisher,Managing Editor,Copy Editor,Staff writer,Freelancer,Designer',
 			'section'      => '',
@@ -93,7 +36,7 @@ function mod_authors_list ($atts, $thing = NULL)
 		 $rs = safe_column('user_id', 'txp_users', $where);
 
 		 $section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
-
+		 
 		 	$out = array();
 			$count = 0;
 			$last = count($rs);
@@ -105,7 +48,7 @@ function mod_authors_list ($atts, $thing = NULL)
 			
 		      ++$count;
 			  
-			   	$where = "user_id='".$row."'";
+			    $where = "user_id='".$row."'";
 			    $author_priv = safe_field('privs', 'txp_users', $where);
 		
 			if (empty($form) && empty($thing))
@@ -121,18 +64,17 @@ function mod_authors_list ($atts, $thing = NULL)
 				
 				if(in_array($author_priv , $privs))
 				{
-					extract($author_info = safe_row('RealName as Rname, name as Uname', 'txp_users', $where));
-						$thisauthor = array('realname' => $Rname, 'name' => $Uname);
+					extract(safe_row('RealName, name', 'txp_users', $where));
+						$thisauthor = array('realname' => $RealName, 'name' => $name);
 						$thisauthor['is_first'] = ($count == 1);
 						$thisauthor['is_last'] = ($count == $last);
-
-					 $out[] = ($thing) ? parse($thing) : parse_form($form);
+					$out[] = ($thing) ? parse($thing) : parse_form($form);
 				}
 				
 				}
 		    }
-			
-		  $thisauthor = $old_author;
+
+                  $thisauthor = (isset($old_author) ? $old_author : NULL);
 		  
 			if ($out)
 			{
@@ -143,11 +85,9 @@ function mod_authors_list ($atts, $thing = NULL)
 }
 // -------------------------------------------------------------
 
-	function mod_author($atts)
+	function ras_author($atts)
 	{
 		global $thisarticle, $s, $thisauthor;
-
-		assert_article();
 
 		extract(lAtts(array(
 			'link'         => '',
@@ -169,18 +109,33 @@ function mod_authors_list ($atts, $thing = NULL)
 			$author_name;
 	}
 // -------------------------------------------------------------
-	function if_first_author($atts, $thing)
+
+	function ras_user()
+	{
+		global $thisarticle,  $thisauthor;
+
+		$author_name = get_author_name($thisarticle['authorid']); //?
+		
+		if (!empty($thisauthor['name']))
+		{
+			$author_name = $thisauthor['name'];
+		}
+
+		return $author_name;
+	}
+// -------------------------------------------------------------
+	function ras_if_first_author($atts, $thing)
 	{
 		global $thisauthor;
-		assert_author();
+                assert_author();
 		return parse(EvalElse($thing, !empty($thisauthor['is_first'])));
 	}
 
 // -------------------------------------------------------------
-	function if_last_author($atts, $thing)
+	function ras_if_last_author($atts, $thing)
 	{
 		global $thisauthor;
-		assert_author();
+                assert_author();
 		return parse(EvalElse($thing, !empty($thisauthor['is_last'])));
 	}
 //--------------------------------------------------------------
@@ -190,65 +145,5 @@ function mod_authors_list ($atts, $thing = NULL)
               trigger_error(gTxt('error_author_context'));
       }
 
-//--------------------------------------------------------------------------------
-// Array values called by array name as text (no leading $) and elemnet as text --
-//--------------------------------------------------------------------------------
-// Attributes are array_name & element for self closing tags ---------------------
-
-    function ras_thing($atts, $thing = NULL)  { // The tag definition
-	 
-	 		extract(lAtts(array(
-			'array_name'        => NULL,
-			'element'           => NULL,
-		), $atts));
-		
-		  $thing = trim('ras_'.$thing);
-
-		  $array_name = 'ras_'.$array_name ; 		 
-		  
-		 if(is_callable($thing))		   
-		  {
-		  	 return $thing();			 
-		  }
-		  
-		if(is_callable($array_name))		   
-		  {
-		  	 return $array_name($element);			 
-		  }
-		  
-		 return ''; 
- 	}
-//---------------------------------------------------------------------------------
-	
-	function ras_thisauthor($element)  { 
-		global $thisauthor;
-		
-		$available_elements = array(
-			'realname',
-			'name'
-		);
-		
-		if (!in_array($element, $available_elements))
-		{
-			return ' element not an array member ';
-			
-		} else {
-		 
-			return $thisauthor[$element]; 
-		}	
-	}
-//--------------------------------------------------------------------------------
-// Functions list, to add your own and make thier value accessable via ras_thing, 
-// alias it by prefixing ras_ to the variable name as the function name. 
-// Render your variable global and return it as the function return value.
-//------------------------------- Thus -------------------------------------------
-
-	
-	function ras_author() {
-		global $author;
-		return $author;
-	}
-	
-// Tags for variables are wraptags of the variable name as text  //
 
 ?>
