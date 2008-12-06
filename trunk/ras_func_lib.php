@@ -368,11 +368,22 @@ global $permlink_mode;
 	function ras_dates_today($atts,$thing)
 	{
   		global $thisarticle;
+		assert_article();
 		extract(lAtts(array(
+			'type' => 'apos',
 			'setdate' => '',
 			'offset' => ''
 		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()));
+		
+	switch($type) {
+		case 'apos' : $tz_date = strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()));
+		break;
+		case 'axpr' : $tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
+		break;
+		case 'amdf' : $tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
+		break;
+	}
+	
 	$thedate = ($setdate) ? $setdate : date('Y-m-d' , mktime() + tz_offset() - ($offset * 86400));
 		 return parse(Evalelse($thing, strtotime($thedate) == $tz_date ));
 	}
@@ -382,11 +393,22 @@ global $permlink_mode;
 	function ras_dates_before($atts,$thing)
 	{
   		global $thisarticle;
+		assert_article();
 		extract(lAtts(array(
 		    'include_today' => '',
+			'type' => 'apos',
 			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
 		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()));
+		
+	switch($type) {
+		case 'apos' : $tz_date = strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()));
+		break;
+		case 'axpr' : $tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
+		break;
+		case 'amdf' : $tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
+		break;
+	}
+	
 	if(empty($include_today)) {
 		return parse(Evalelse($thing, strtotime($setdate) > $tz_date ));
 		} else { return parse(Evalelse($thing, strtotime($setdate) >= $tz_date )); }
@@ -397,97 +419,22 @@ global $permlink_mode;
 	function ras_dates_after($atts,$thing)
 	{
   		global $thisarticle;
+		assert_article();
 		extract(lAtts(array(
 		    'include_today' => '',
+			'type' => 'apos',
 			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
 		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()));
-	if(empty($include_today)) {
-		return parse(Evalelse($thing, strtotime($setdate) < $tz_date ));
-		} else { return parse(Evalelse($thing, strtotime($setdate) <= $tz_date )); }
-	}
-//-----------------------------------------------------------------------------
-
-	function ras_modified_today($atts,$thing)
-	{
-  		global $thisarticle;
-		extract(lAtts(array(
-			'setdate' => '',
-			'offset' => ''
-		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
-	$thedate = ($setdate) ? $setdate : date('Y-m-d' , mktime() + tz_offset() - ($offset * 86400));
-		 return parse(Evalelse($thing, strtotime($thedate) == $tz_date ));
+		
+	switch($type) {
+		case 'apos' : $tz_date = strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()));
+		break;
+		case 'axpr' : $tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
+		break;
+		case 'amdf' : $tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
+		break;
 	}
 	
-//------------------------------------------------------------------------------
-
-	function ras_modified_before($atts,$thing)
-	{
-  		global $thisarticle;
-		extract(lAtts(array(
-		    'include_today' => '',
-			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
-		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
-	if(empty($include_today)) {
-		return parse(Evalelse($thing, strtotime($setdate) > $tz_date ));
-		} else { return parse(Evalelse($thing, strtotime($setdate) >= $tz_date )); }
-	}
-
-//------------------------------------------------------------------------------
-
-	function ras_modified_after($atts,$thing)
-	{
-  		global $thisarticle;
-		extract(lAtts(array(
-		    'include_today' => '',
-			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
-		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['modified'] + tz_offset()));
-	if(empty($include_today)) {
-		return parse(Evalelse($thing, strtotime($setdate) < $tz_date ));
-		} else { return parse(Evalelse($thing, strtotime($setdate) <= $tz_date )); }
-	}
-//-----------------------------------------------------------------------------
-
-	function ras_expires_today($atts,$thing)
-	{
-  		global $thisarticle;
-		extract(lAtts(array(
-			'setdate' => '',
-			'offset' => ''
-		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
-	$thedate = ($setdate) ? $setdate : date('Y-m-d' , mktime() + tz_offset() - ($offset * 86400));
-		 return parse(Evalelse($thing, strtotime($thedate) == $tz_date ));
-	}
-	
-//------------------------------------------------------------------------------
-
-	function ras_expires_before($atts,$thing)
-	{
-  		global $thisarticle;
-		extract(lAtts(array(
-		    'include_today' => '',
-			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
-		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
-	if(empty($include_today)) {
-		return parse(Evalelse($thing, strtotime($setdate) > $tz_date ));
-		} else { return parse(Evalelse($thing, strtotime($setdate) >= $tz_date )); }
-	}
-
-//------------------------------------------------------------------------------
-
-	function ras_expires_after($atts,$thing)
-	{
-  		global $thisarticle;
-		extract(lAtts(array(
-		    'include_today' => '',
-			'setdate' => date('Y-m-d' , mktime() + tz_offset()) 
-		),$atts));
-	$tz_date = strtotime(date('Y-m-d', $thisarticle['expires'] + tz_offset()));
 	if(empty($include_today)) {
 		return parse(Evalelse($thing, strtotime($setdate) < $tz_date ));
 		} else { return parse(Evalelse($thing, strtotime($setdate) <= $tz_date )); }
@@ -495,96 +442,77 @@ global $permlink_mode;
 
 //-------------------------------------------------------------------------------
 
-	function ras_enable_articles($atts,$thing)
-	{
-  		global $thisarticle;
-		extract(lAtts(array(
-			'days' => '',
-			'hours' => '',
-			'minutes' => ''
-		),$atts));
-	   $offset = $days * 86400 + $hours * 3600 + $minutes * 60;
-        return parse(Evalelse($thing, $thisarticle['posted'] + $offset > mktime() ));
-	}
-	
-//--------------------------------------------------------------------------------
-
-	function ras_disable_articles($atts,$thing)
-	{
-  		global $thisarticle;
-		extract(lAtts(array(
-			'days' => '',
-			'hours' => '',
-			'minutes' => ''
-		),$atts));
-	   $offset = $days * 86400 + $hours * 3600 + $minutes * 60;
-        return parse(Evalelse($thing, $thisarticle['posted'] + $offset < mktime() ));
-	}
-	
-//--------------------------------------------------------------------------------
-
-	function ras_enable_links($atts,$thing)
-	{
-	global $thislink;
-		extract(lAtts(array(
-			'days' => '',
-			'hours' => '',
-			'minutes' => ''
-		),$atts));
-	   $offset = $days * 86400 + $hours * 3600 + $minutes * 60;
-        return parse(Evalelse($thing, $thislink['date'] + $offset > mktime() ));
-	}
-	
-//--------------------------------------------------------------------------------
-
-	function ras_disable_links($atts,$thing)
-	{
-		global $thislink;
-		extract(lAtts(array(
-			'days' => '',
-			'hours' => '',
-			'minutes' => ''
-		),$atts));
-	   $offset = $days * 86400 + $hours * 3600 + $minutes * 60;
-        return parse(Evalelse($thing, $thislink['date'] + $offset < mktime() ));
-	}
-	
-//--------------------------------------------------------------------------------
-
-	function ras_enable_downloads($atts,$thing)
-	{
-  		global $thisfile;
+function ras_enable_content($atts,$thing)
+{
+  		global $thisarticle, $thislink, $thisfile;
 		extract(lAtts(array(
 			'days' => '',
 			'hours' => '',
 			'minutes' => '',
-			'mod' => ''
+			'type' => 'apos'
 		),$atts));
-	   $offset = $days * 86400 + $hours * 3600 + $minutes * 60;
-	   if(empty($mod)){
-        return parse(Evalelse($thing, $thisfile['created'] + $offset > mktime() ));
-		} else { return parse(Evalelse($thing, $thisfile['modified'] + $offset > mktime() )); }
-	}
+		
+	$offset = $days * 86400 + $hours * 3600 + $minutes * 60;
 	
-//--------------------------------------------------------------------------------
-
-	function ras_disable_downloads($atts,$thing)
+	array();
+	
+	switch ($type) {
+		case 'apos' :
+		assert_article(); 
+        	return parse(Evalelse($thing, $thisarticle['posted'] + $offset > mktime() ));
+		break;
+		case 'axpr' :
+		assert_article();  
+        	return parse(Evalelse($thing, $thisarticle['expires'] + $offset > mktime() ));
+		break;
+		case 'amdf' :
+		assert_article();  
+        	return parse(Evalelse($thing, $thisarticle['modified'] + $offset > mktime() ));
+		break;
+		case 'cpos' :
+		assert_comment();  
+        	return parse(Evalelse($thing, $thiscomment['posted'] + $offset > mktime() ));
+		break;
+		case 'fpos' :
+		assert_file(); 
+		    return parse(Evalelse($thing, $thisfile['created'] + $offset > mktime() ));
+		break;
+		case 'fmdf' :
+		assert_file(); 
+		    return parse(Evalelse($thing, $thisfile['modified'] + $offset > mktime() ));
+		break;
+		case 'lpos' :
+		assert_link(); 
+		    return parse(Evalelse($thing, $thislink['date'] + $offset > mktime() ));
+		break;
+	}
+}
+//--------------------4.0.7 Development---------------------------------
+	function ras_dates_days($atts, $thing='')
 	{
-  		global $thisfile;
-		extract(lAtts(array(
-			'days' => '',
-			'hours' => '',
-			'minutes' => '',
-			'mod' => ''
-		),$atts));
-	   $offset = $days * 86400 + $hours * 3600 + $minutes * 60;
-	   if(empty($mod)){
-        return parse(Evalelse($thing, $thisfile['created'] + $offset < mktime() ));
-		} else { return parse(Evalelse($thing, $thisfile['modified'] + $offset < mktime() )); }
+	global $thisarticle;
+	assert_article();
+	return ceil(mktime()/86400) - ceil(strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()))/86400);
 	}
 
-//-------------------------------------------------------------------------------
+	function ras_dates_hours($atts, $thing='')
+	{
+	global $thisarticle;
+	assert_article();
+	global $thisarticle;
+	assert_article();
+	return ceil(mktime()/3600) - ceil(strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()))/3600);
+	}
 
+	function ras_dates_minutes($atts, $thing='')
+	{
+	global $thisarticle;
+	assert_article();
+	global $thisarticle;
+	assert_article();
+	return ceil(mktime()/60) - ceil(strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()))/60);
+	}
+//-----------------------------------------------------------------------
 	function ras_if_article_category1($atts, $thing)
 	{
 		global $thisarticle;
@@ -673,51 +601,6 @@ function ras_if_article_keywords($atts, $thing)
 	
 function array_equal($a, $b) {
     return (is_array($a) && is_array($b) && array_diff($a, $b) === array_diff($b, $a));
-}
-
-//---------------------------------------------------------------------------------
-
-function ras_caption_index($atts)
-{
-	global $s,$c,$p,$img_dir,$path_to_site;
-	extract(lAtts(array(
-		'label'    => '',
-		'break'    => br,
-		'wraptag'  => '',
-		'class'    => __FUNCTION__,
-		'labeltag' => '',
-		'c'        => $c, // Keep the option to override categories due to backward compatiblity
-		'limit'    => 0,
-		'offset'   => 0,
-		'nolink'   => 0,
-		'sort'     => 'name ASC',
-	),$atts));
-
-	$qparts = array(
-		"category = '".doSlash($c)."'",
-		'order by '.doSlash($sort),
-		($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
-	);
-
-	$rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
-
-	if ($rs) {
-		$out = array();
-		while ($a = nextRow($rs)) {
-			extract($a);
-			$url = pagelinkurl(array('c'=>$c, 's'=>$s, 'p'=>$id));
-			if($nolink) {
-				$out[] = $caption;
-			} else {
-			$out[] = '<a href="'.$url.'">'.
-				$caption.'</a>';
-			}
-		}
-		if (count($out)) {
-			return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-		}
-	}
-	return '';
 }
 
 ?>
