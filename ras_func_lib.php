@@ -92,12 +92,12 @@ function ras_if_category_type($atts,$thing)
 						 'name' => $c
                  ),$atts));
 	
-                 if($c != $name) 
+                 if($c != trim($name)) 
                       {
                          return parse(EvalElse($thing, 0));
                       } 
                        else {
-				 	$c = doSlash($name);
+				 	$c = doSlash(trim($name));
 			      }
   
 		$where = "name='".doSlash($c)."' and type='".doSlash($type)."'";
@@ -499,15 +499,11 @@ function ras_enable_content($atts,$thing)
 	{
 	global $thisarticle;
 	assert_article();
-	global $thisarticle;
-	assert_article();
 	return ceil(mktime()/3600) - ceil(strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()))/3600);
 	}
 
 	function ras_dates_minutes($atts, $thing='')
 	{
-	global $thisarticle;
-	assert_article();
 	global $thisarticle;
 	assert_article();
 	return ceil(mktime()/60) - ceil(strtotime(date('Y-m-d', $thisarticle['posted'] + tz_offset()))/60);
