@@ -77,4 +77,16 @@ jQuery.fn.listeffect = function(startState , fadeStop) {
 		return this;
 };
 
+/**
+* Static list number of members append.
+**/
+
+
+jQuery.fn.listmembers = function(fadeStop) {
+		var thisLink = this.attr('class');
+			$("." + thisLink  + "").prev().append("(" + $("." + thisLink  + " > li").length + ")").fadeTo('fast', fadeStop);
+		return this;
+};
+
 })(jQuery);
+

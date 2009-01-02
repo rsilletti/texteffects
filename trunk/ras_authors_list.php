@@ -1,6 +1,6 @@
 <?php
 
-function ras_authors_list ($atts, $thing = NULL) 
+function ras_author_list ($atts, $thing = NULL) 
 {
 		global $s, $thisauthor;
 		extract(lAtts(array(
@@ -26,6 +26,15 @@ function ras_authors_list ($atts, $thing = NULL)
 					case 'Staff writer' : $privs[] = 4; break;
 					case 'Freelancer' : $privs[] = 5; break;
 					case 'Designer' : $privs[] = 6; break;
+					case '1' : $privs[] = 1; break;
+					case '2' : $privs[] = 2; break;
+					case '3' : $privs[] = 3; break;
+					case '4' : $privs[] = 4; break;
+					case '5' : $privs[] = 5; break;
+					case '6' : $privs[] = 6; break;
+					case '7' : $privs[] = 7; break;
+					case '8' : $privs[] = 8; break;
+					case '9' : $privs[] = 9; break;
 					}
 				}
 		
