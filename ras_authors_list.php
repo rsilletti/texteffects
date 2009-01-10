@@ -121,9 +121,10 @@ function ras_author_list ($atts, $thing = NULL)
 
 	function ras_user()
 	{
-		global $thisarticle,  $thisauthor;
+		global $thisarticle,  $thisauthor, $author ;
 
-		$author_name = get_author_name($thisarticle['authorid']); //?
+		$author_name = $author;
+		$login_name = $thisarticle['authorid']; //?
 		
 		if (!empty($thisauthor['name']))
 		{
