@@ -38,7 +38,7 @@ function expired_list()
 		
 			if(has_privs('article.delete'))
 			{
-       			$insert .= '<p><a href="?event=article'.a.'action=delete">Delete All Expired <br />(irreversable)</a></p></div>';
+       			$insert .= '<p><a href="?event=article'.a.'action=delete" onclick="return verify(\'Permanently delete ALL expired articles?\')">Delete All Expired</a></p></div>';
 			}
 			
      		if(is_callable('dom_attach')) 
