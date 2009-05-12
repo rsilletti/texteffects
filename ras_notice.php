@@ -6,7 +6,6 @@
 			'format' => 'day, hour, minute, second',
 			'type' => 'apos'
 		),$atts));
-		$diff_atts = array();
 		switch ($type) {
 		case 'apos' :
 		
@@ -70,8 +69,7 @@
 			'trail_past'  	=> '',
 			'day_text'    	=> '',
 			'class'        	=> __FUNCTION__		
-		),$atts));
-		$diff_atts = array();		
+		),$atts));		
 		switch ($type) {
 		case 'apos' :		
         	$time_diff = new RasTimeDiff(ts_diff::apos_diff());
@@ -114,8 +112,6 @@
 
 	
 class RasTimeDiff {
-
-        private $diff =0;
 
 	function __construct($diff)
 	{
