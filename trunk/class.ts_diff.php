@@ -22,10 +22,16 @@ abstract class ts_diff {
 * @return integer   false on failure
 */
  static function apos_diff() {
-		global $thisarticle;
-		assert_article();
-	return time() - $thisarticle['posted'] ;
-	}
+ 
+	global $thisarticle;
+	assert_article();
+	
+	if($thisarticle['posted']) {
+		return time() - $thisarticle['posted'] ;
+	} else {
+		return false;
+		}
+ }
 
 /**
 * Article expiration time diff to server current time. 
@@ -33,10 +39,16 @@ abstract class ts_diff {
 * @return integer   false on failure
 */
  static function axpr_diff() {
-		global $thisarticle;
-		assert_article();
-	return time() - $thisarticle['expires'] ;
-	}
+ 
+	global $thisarticle;
+	assert_article();
+	
+	if($thisarticle['expires']) {
+		return time() - $thisarticle['expires'] ;
+	} else {
+		return false;
+		}
+ }
 
 /**
 * Article modified time diff to server current time. 
@@ -44,10 +56,16 @@ abstract class ts_diff {
 * @return integer   false on failure
 */
  static function amdf_diff() {
-		global $thisarticle;
-		assert_article();
-	return time() - $thisarticle['modified'] ;
-	}
+ 
+	global $thisarticle;
+	assert_article();
+	
+	if($thisarticle['modified']) {
+		return time() - $thisarticle['modified'] ;
+	} else {
+		return false;
+		}
+ }
 
 /**
 * Comment posting time diff to server current time. 
@@ -55,10 +73,16 @@ abstract class ts_diff {
 * @return integer   false on failure
 */
  static function cpos_diff() {
-		global $thiscomment;
-		assert_comment();
-	return time() - $thiscomment['posted'] ;
-	}
+ 
+	global $thiscomment;
+	assert_comment();
+	
+	if($thiscomment['posted']) {
+		return time() - $thiscomment['posted'] ;
+	} else {
+		return false;
+		}
+ }
 
 /**
 * File creation time diff to server current time. 
@@ -66,10 +90,16 @@ abstract class ts_diff {
 * @return integer   false on failure
 */
  static function fpos_diff() {
-		global $thisfile;
-		assert_file();
-	return time() - $thisfile['created'] ;
-	}
+ 
+	global $thisfile;
+	assert_file();
+	
+	if($thisfile['created']) {
+		return time() - $thisfile['created'] ;
+	} else {
+		return false;
+		}
+ }
 
 /**
 * File modified time diff to server current time. 
@@ -77,10 +107,16 @@ abstract class ts_diff {
 * @return integer   false on failure
 */
  static function fmdf_diff() {
-		global $thisfile;
-		assert_file();
-	return time() - $thisfile['modified'] ;
-	}
+ 
+	global $thisfile;
+	assert_file();
+	
+	if($thisfile['modified']) {
+		return time() - $thisfile['modified'] ;
+	} else {
+		return false;
+		}
+ }
 
 /**
 * Link created time diff to server current time. 
@@ -88,9 +124,14 @@ abstract class ts_diff {
 * @return integer   false on failure
 */
  static function lpos_diff() {
-		global $thislink;
-		assert_link();
-	return time() - $thislink['date'] ;
-	}
-}
+ 
+	global $thislink;
+	assert_link();
+	
+	if($thislink['date']) {
+		return time() - $thislink['date'] ;
+	} else {
+		return false;
+		}
+ }
 ?>
