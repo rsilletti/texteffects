@@ -19,7 +19,7 @@ abstract class ts_diff {
 /**
 * Article posting time diff to server current time. 
 * Static call ts_diff::apos_diff()
-* @return integer   false on failure
+* @return integer   0 on failure
 */
  static function apos_diff() {
  
@@ -29,14 +29,14 @@ abstract class ts_diff {
 	if($thisarticle['posted']) {
 		return time() - $thisarticle['posted'] ;
 	} else {
-		return false;
+		return 0;
 		}
  }
 
 /**
 * Article expiration time diff to server current time. 
 * Static call ts_diff::axpr_diff()
-* @return integer   false on failure
+* @return integer   0 on failure
 */
  static function axpr_diff() {
  
@@ -46,14 +46,14 @@ abstract class ts_diff {
 	if($thisarticle['expires']) {
 		return time() - $thisarticle['expires'] ;
 	} else {
-		return false;
+		return 0;
 		}
  }
 
 /**
 * Article modified time diff to server current time. 
 * Static call ts_diff::amdf_diff()
-* @return integer   false on failure
+* @return integer   0 on failure
 */
  static function amdf_diff() {
  
@@ -63,14 +63,14 @@ abstract class ts_diff {
 	if($thisarticle['modified']) {
 		return time() - $thisarticle['modified'] ;
 	} else {
-		return false;
+		return 0;
 		}
  }
 
 /**
 * Comment posting time diff to server current time. 
 * Static call ts_diff::cpos_diff()
-* @return integer   false on failure
+* @return integer   0 on failure
 */
  static function cpos_diff() {
  
@@ -80,14 +80,14 @@ abstract class ts_diff {
 	if($thiscomment['posted']) {
 		return time() - $thiscomment['posted'] ;
 	} else {
-		return false;
+		return 0;
 		}
  }
 
 /**
 * File creation time diff to server current time. 
 * Static call ts_diff::fpos_diff()
-* @return integer   false on failure
+* @return integer   0 on failure
 */
  static function fpos_diff() {
  
@@ -97,14 +97,14 @@ abstract class ts_diff {
 	if($thisfile['created']) {
 		return time() - $thisfile['created'] ;
 	} else {
-		return false;
+		return 0;
 		}
  }
 
 /**
 * File modified time diff to server current time. 
 * Static call ts_diff::fmdf_diff()
-* @return integer   false on failure
+* @return integer   0 on failure
 */
  static function fmdf_diff() {
  
@@ -114,14 +114,14 @@ abstract class ts_diff {
 	if($thisfile['modified']) {
 		return time() - $thisfile['modified'] ;
 	} else {
-		return false;
+		return 0;
 		}
  }
 
 /**
 * Link created time diff to server current time. 
 * Static call ts_diff::lpos_diff()
-* @return integer   false on failure
+* @return integer   0 on failure
 */
  static function lpos_diff() {
  
@@ -131,8 +131,8 @@ abstract class ts_diff {
 	if($thislink['date']) {
 		return time() - $thislink['date'] ;
 	} else {
-		return false;
+		return 0;
 		}
  }
-}
+ }
 ?>
