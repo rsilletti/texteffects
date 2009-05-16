@@ -134,4 +134,5 @@ abstract class ts_diff {
 		return false;
 		}
  }
+}
 ?>
