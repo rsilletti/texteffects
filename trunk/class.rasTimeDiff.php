@@ -16,7 +16,7 @@
 */
 
 	
-class rasTimeDiff {
+public class rasTimeDiff {
 
 	function __construct($diff)
 	{
@@ -56,7 +56,6 @@ class rasTimeDiff {
 	else 
 	
 	if($diff < 0) {
-
 			
 		while ($diff < 86400) {
 			--$count;
