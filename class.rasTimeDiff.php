@@ -1,5 +1,19 @@
 <?php
-//---------------------------------------------------------------------------------------------
+
+/**
+* @license http://www.gnu.org/licenses/licenses.html#GPL
+* @package txpdiff
+*/
+
+/**
+* Returns diff value in days, hours, minutes, and seconds
+* as passed as seconds for total diff as an integer - both positive
+* and negative values.
+*
+* @package txpdiff
+* @author Rick Silletti
+* @copyright 2009 Rick Silletti
+*/
 
 	
 class rasTimeDiff {
@@ -13,83 +27,61 @@ class rasTimeDiff {
 
   	$this->total = $diff;
 	$count = 0;
+
 	if($diff > 0) {
 
 		while ($diff > 86400) {
 			++$count;
 				$diff = $diff - 86400;	
-
-
 			}
-			$this->days = $count;
-			
+			$this->days = $count;			
 	$count = 0;
 	
 		while ($diff > 3600) {
 			++$count;
 				$diff = $diff - 3600;	
 			}
-			$this->hours = $count;
-			
+			$this->hours = $count;			
 	$count = 0;
-
-
 
 		while ($diff > 60) {
 			++$count;
 				$diff = $diff - 60;	
 			}
 			$this->minutes = $count;
-
-			$this->seconds = $diff;
-
-
-			
-	return $this;
-
-	
+			$this->seconds = $diff;			
+	return $this;	
 	}
-
-
-
 	 
 	else 
 	
 	if($diff < 0) {
-	
-			$diff = abs($diff);
+
 			
-		while ($diff > 86400) {
+		while ($diff < 86400) {
 			--$count;
-				$diff = $diff - 86400;	
+				$diff = $diff + 86400;	
 			}
-			$this->days = $count;
-			
+			$this->days = $count;			
 	$count = 0;
 	
-		while ($diff > 3600) {
+		while ($diff < 3600) {
 			--$count;
-				$diff = $diff - 3600;	
+				$diff = $diff + 3600;	
 			}
-			$this->hours = $count;
-			
+			$this->hours = $count;			
 	$count = 0;
 
-		while ($diff > 60) {
+		while ($diff < 60) {
 			--$count;
-				$diff = $diff - 60;	
+				$diff = $diff + 60;	
 			}
 			$this->minutes = $count;
-			$this->seconds = $diff* -1;
-			
-	return $this;
-	
+			$this->seconds = $diff;			
+	return $this;	
 		}
-			else return 0;
-		}
-        function __toString() {
-                return "{$this->total}";
-          }
+		else return 0;
+	  }
 	}
 
 ?>
