@@ -21,7 +21,7 @@ abstract class ts_diff {
 * Static call ts_diff::apos_diff()
 * @return integer   0 on failure
 */
- static function apos_diff() {
+ public static function apos_diff() {
  
 	global $thisarticle;
 	assert_article();
@@ -38,7 +38,7 @@ abstract class ts_diff {
 * Static call ts_diff::axpr_diff()
 * @return integer   0 on failure
 */
- static function axpr_diff() {
+ public static function axpr_diff() {
  
 	global $thisarticle;
 	assert_article();
@@ -55,7 +55,7 @@ abstract class ts_diff {
 * Static call ts_diff::amdf_diff()
 * @return integer   0 on failure
 */
- static function amdf_diff() {
+ public static function amdf_diff() {
  
 	global $thisarticle;
 	assert_article();
@@ -72,7 +72,7 @@ abstract class ts_diff {
 * Static call ts_diff::cpos_diff()
 * @return integer   0 on failure
 */
- static function cpos_diff() {
+ public static function cpos_diff() {
  
 	global $thiscomment;
 	assert_comment();
@@ -89,7 +89,7 @@ abstract class ts_diff {
 * Static call ts_diff::fpos_diff()
 * @return integer   0 on failure
 */
- static function fpos_diff() {
+ public static function fpos_diff() {
  
 	global $thisfile;
 	assert_file();
@@ -106,7 +106,7 @@ abstract class ts_diff {
 * Static call ts_diff::fmdf_diff()
 * @return integer   0 on failure
 */
- static function fmdf_diff() {
+ public static function fmdf_diff() {
  
 	global $thisfile;
 	assert_file();
@@ -123,7 +123,7 @@ abstract class ts_diff {
 * Static call ts_diff::lpos_diff()
 * @return integer   0 on failure
 */
- static function lpos_diff() {
+ public static function lpos_diff() {
  
 	global $thislink;
 	assert_link();
