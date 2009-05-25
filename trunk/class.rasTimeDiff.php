@@ -13,6 +13,9 @@
 * @package txpdiff
 * @author Rick Silletti
 * @copyright 2009 Rick Silletti
+*...
+* @param $diff seconds in total
+* @return object days,hours,minutes,second
 */
 
 	
