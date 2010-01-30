@@ -72,11 +72,43 @@
 
 //--------------------------------------------------------------------------------
 
+	function ras_thisimage($element)  { 
+		global $thisimage;
+		
+		$available_elements = array(
+			'pg',
+			'name',
+			'category',
+			'ext',
+			'alt',
+			'caption',
+			'date',
+			'author',
+			'thumbnail',
+			'thumb_w',
+			'thumb_h',
+			'category_title',
+			'w',
+			'h'
+		);
+		
+		if (!in_array($element, $available_elements))
+		{
+			return ' element not an array member ';
+			
+		} else {
+		 
+			return $thisimage[$element]; 
+		}
+	}
+
+//--------------------------------------------------------------------------------
+
 	function ras_thispage($element)  { 
 		global $thispage;
 		
 		$available_elements = array(
-			'pg',
+			'id',
 			'numPages',
 			's',
 			'c',
