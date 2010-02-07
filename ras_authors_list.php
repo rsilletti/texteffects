@@ -8,7 +8,7 @@ function ras_author_list ($atts, $thing = NULL)
 			'label'        => '',
 			'labeltag'     => '',
 			'sort'         => 'user_id desc',
-			'form'         => ''
+                        'form'        => '',
 			'wraptag'      => '',
 			'type'         => 'Publisher,Managing Editor,Copy Editor,Staff writer,Freelancer,Designer',
 			'section'      => '',
@@ -26,6 +26,7 @@ function ras_author_list ($atts, $thing = NULL)
 					case 'Staff writer' : $privs[] = 4; break;
 					case 'Freelancer' : $privs[] = 5; break;
 					case 'Designer' : $privs[] = 6; break;
+					case '0' : $privs[] = 0; break;
 					case '1' : $privs[] = 1; break;
 					case '2' : $privs[] = 2; break;
 					case '3' : $privs[] = 3; break;
@@ -48,15 +49,22 @@ function ras_author_list ($atts, $thing = NULL)
 		 
 		 	$out = array();
 			$count = 0;
-			$last = count($rs);
+			$last = 0;
+
+  		 foreach($rs as $index)
+		    {
+			    $where = "user_id='".$index."'";
+			    $author_count = safe_field('privs', 'txp_users', $where);
+		
+					if(in_array($author_count , $privs)) {
+						++$last;
+					}
+		    }
 		
 		 $old_author = $thisauthor;
 		 
   		 foreach($rs as $row)
 		    {
-			
-		      ++$count;
-			  
 			    $where = "user_id='".$row."'";
 			    $author_priv = safe_field('privs', 'txp_users', $where);
 		
@@ -64,22 +72,27 @@ function ras_author_list ($atts, $thing = NULL)
 				{
 					if(in_array($author_priv , $privs))
 					{
+		      		++$count;
+		      			$thisauthor['is_first'] = ($count == 1);
+		      			$thisauthor['is_last'] = ($count == $last);
 						$author_name = safe_field('RealName', 'txp_users', $where);
 						$out[] = href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name)));
 					}
 				}
 				else
 				{
-				
+
 				if(in_array($author_priv , $privs))
 				{
-					extract(safe_row('RealName, name', 'txp_users', $where));
-						$thisauthor = array('realname' => $RealName, 'name' => $name);
-						$thisauthor['is_first'] = ($count == 1);
-						$thisauthor['is_last'] = ($count == $last);
-					$out[] = ($thing) ? parse($thing) : parse_form($form);
-				}
 				
+		     	 ++$count;
+		      		$thisauthor['is_first'] = ($count == 1);
+		     		$thisauthor['is_last'] = ($count == $last);
+					extract(safe_row('RealName, name', 'txp_users', $where));
+					$thisauthor['realname'] = $RealName;
+					$thisauthor['name'] = $name;
+					$out[] = ($thing) ? parse($thing) : parse_form($form);
+				}	
 				}
 		    }
 
