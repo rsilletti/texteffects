@@ -516,7 +516,7 @@ function ras_enable_content($atts,$thing)
 		extract(lAtts(array(
 			'name' => '',
 		),$atts));
-	return parse(EvalElse($thing, do_list($thisarticle['category1'] , $name)));
+	return parse(EvalElse($thing, in_list($thisarticle['category1'] , $name)));
 	}
 
 //---------------------------------------------------------------------------------
@@ -528,7 +528,7 @@ function ras_enable_content($atts,$thing)
 		extract(lAtts(array(
 			'name' => '',
 		),$atts));
-	return parse(EvalElse($thing, do_list($thisarticle['category2'] , $name)));
+	return parse(EvalElse($thing, in_list($thisarticle['category2'] , $name)));
 	}
 	
 //--------------------------------------------------------------------------------
@@ -537,6 +537,7 @@ function ras_enable_content($atts,$thing)
 	{
   		global $thisarticle, $thislink;
                 assert_article();
+                assert_link();
 		extract(lAtts(array(
 			'setdate' => ''
 		),$atts));
