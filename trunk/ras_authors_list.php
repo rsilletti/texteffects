@@ -8,7 +8,7 @@ function ras_author_list ($atts, $thing = NULL)
 			'label'        => '',
 			'labeltag'     => '',
 			'sort'         => 'user_id desc',
-            'form'        => '',
+			'form'        => '',
 			'wraptag'      => '',
 			'type'         => 'Publisher,Managing Editor,Copy Editor,Staff writer,Freelancer,Designer',
 			'section'      => '',
@@ -47,11 +47,11 @@ function ras_author_list ($atts, $thing = NULL)
 
 		 $section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 		 
-		 	$out = array();
+			$out = array();
 			$count = 0;
 			$last = 0;
 
-  		 foreach($rs as $index)
+		 foreach($rs as $index)
 		    {
 			    $where = "user_id='".$index."'";
 			    $author_count = safe_field('privs', 'txp_users', $where);
@@ -63,7 +63,7 @@ function ras_author_list ($atts, $thing = NULL)
 		
 		 $old_author = $thisauthor;
 		 
-  		 foreach($rs as $row)
+		 foreach($rs as $row)
 		    {
 			    $where = "user_id='".$row."'";
 			    $author_priv = safe_field('privs', 'txp_users', $where);
