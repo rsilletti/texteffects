@@ -21,26 +21,22 @@ private $debug;
         
         function sumName() {
         	$num = safe_row("SUM(".$this->field.")" , 'textpattern' , $this->where);
-    		$this->result = $num["SUM(".$this->field.")"];
-    		return $this->result;
+    		return $num["SUM(".$this->field.")"];
         }
 
         function countName() {
         	$num = safe_row("COUNT(".$this->field.")" , 'textpattern' , $this->where);
-    		$this->result = $num["COUNT(".$this->field.")"];
-    		return $this->result;
+    		return $num["COUNT(".$this->field.")"];
         }
 
         function maxName() {
         	$num = safe_row("MAX(".$this->field.")" , 'textpattern' , $this->where);
-    		$this->result = $num["MAX(".$this->field.")"];
-    		return $this->result;
+    		return $num["MAX(".$this->field.")"];
         }
 
         function minName() {
         	$num = safe_row("MIN(".$this->field.")" , 'textpattern' , $this->where);
-    		$this->result = $num["MIN(".$this->field.")"];
-    		return $this->result;
+    		return $num["MIN(".$this->field.")"];
         }
 }
 
