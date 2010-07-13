@@ -2,72 +2,46 @@
 
 class CustomByName {
 
-public $fieldname;
+private $name;
+private $debug;
 
-        function __construct($fieldname)
+        function __construct($name, $debug=null)
         {
-        $this->name = $fieldname;
+        $this->name = $name;
+        $this->debug = $debug;
         
 			$where = "val='".doSlash($this->name)."'";
 			$rs = safe_row('name', 'txp_prefs', $where);
 			
 		$this->field = rtrim($rs['name'], '_set');
-			  
-        return $this;
-        
+		$this->where = "".$this->field." > 0"; 
+		return ($debug) ? dmp($this) : $this;
+		
         }
-}
+        
+        function sumName() {
+        	$num = safe_row("SUM(".$this->field.")" , 'textpattern' , $this->where);
+    		$this->result = $num["SUM(".$this->field.")"];
+    		return $this->result;
+        }
 
-class SumName extends CustomByName {
-		
-		function __construct($fieldname) {
-		        
-		    parent::__construct($fieldname);
-		$where = "".$this->field." > 0";        	
-		$num = safe_row("SUM(".$this->field.")" , 'textpattern' , $where);
-    	$this->result = $num["SUM(".$this->field.")"];
-    	return $this;
-    	}
-		        	
-}
+        function countName() {
+        	$num = safe_row("COUNT(".$this->field.")" , 'textpattern' , $this->where);
+    		$this->result = $num["COUNT(".$this->field.")"];
+    		return $this->result;
+        }
 
-class CountName extends CustomByName {
-		
-		function __construct($fieldname) {
-		        
-		    parent::__construct($fieldname);
-		$where = "".$this->field." > 0";
-		$num = safe_row("COUNT(".$this->field.")" , 'textpattern' , $where);
-    	$this->result = $num["COUNT(".$this->field.")"];
-    	return $this;
-    	}
-		        	
-}
+        function maxName() {
+        	$num = safe_row("MAX(".$this->field.")" , 'textpattern' , $this->where);
+    		$this->result = $num["MAX(".$this->field.")"];
+    		return $this->result;
+        }
 
-class MaxName extends CustomByName {
-		
-		function __construct($fieldname) {
-		        
-		    parent::__construct($fieldname);
-		$where = "".$this->field." > 0";        	
-		$num = safe_row("MAX(".$this->field.")" , 'textpattern' , $where);
-    	$this->result = $num["MAX(".$this->field.")"];
-    	return $this;
-    	}
-		        	
-}
-
-class MinName extends CustomByName {
-		
-		function __construct($fieldname) {
-		        
-		    parent::__construct($fieldname);
-		$where = "".$this->field." > 0";        	
-		$num = safe_row("MIN(".$this->field.")" , 'textpattern' , $where);
-    	$this->result = $num["MIN(".$this->field.")"];
-    	return $this;
-    	}
-		        	
+        function minName() {
+        	$num = safe_row("MIN(".$this->field.")" , 'textpattern' , $this->where);
+    		$this->result = $num["MIN(".$this->field.")"];
+    		return $this->result;
+        }
 }
 
 ?>
