@@ -18,7 +18,8 @@
 * Class constructor is passed a field name as text 
 * and returns the textpattern table column name that
 * is associated with it.
-* @return text 
+* @param custom field name as text
+* @return textpattern column name as text 
 */
 class CustomByName {
 
