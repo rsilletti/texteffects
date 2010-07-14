@@ -35,7 +35,7 @@ private $debug;
 			
 		$this->field = rtrim($rs['name'], '_set');
 		$this->where = "".$this->field." > 0"; 
-		return ($debug) ? dmp($this) : $this;
+		return ($this->debug) ? dmp($this) : $this;
 		
         }
 /**
