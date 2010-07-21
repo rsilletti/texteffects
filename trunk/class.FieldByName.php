@@ -41,7 +41,7 @@ private $debug;
 /**
 * Returns value set in custom field named per article from inside article form. 
 * function call obj->fieldData()
-* @return array
+* @return text
 */
 
 		function fieldData() 
