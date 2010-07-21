@@ -26,28 +26,30 @@ class FieldByName {
 private $name;
 private $debug;
 
-        function __construct($name, $debug=null)
-        {
-        $this->name = $name;
-        $this->debug = $debug;
-        
+		function __construct($name, $debug=null)
+		{
+		$this->name = $name;
+		$this->debug = $debug;
+
 			$where = "val='".doSlash($this->name)."'";
 			$rs = safe_row('name', 'txp_prefs', $where);
 		$this->field = rtrim($rs['name'], '_set');
 		return ($debug) ? dmp($this) : $this;		
-        }
+		}
+
 /**
 * Returns value set in custom field named per article from inside article form. 
 * function call obj->fieldData()
 * @return array
 */
 
-        function fieldData() 
-        {
-        global $thisarticle;
-        	assert_article();        	
-        return $thisarticle[strtolower($this->name)];
-        }
+		function fieldData() 
+		{
+		global $thisarticle;
+
+		assert_article();
+		return $thisarticle[strtolower($this->name)];
+		}
 
 /**
 * Returns an indexed array of values set in custom field named. 
@@ -55,11 +57,12 @@ private $debug;
 * @return array
 */
 
-        function fieldsData() {
-        	$where_data = " `".$this->field."` !=  ''";
-        	$this->num = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$where_data."");
-    		return $this->num;
-        }
+		function fieldsData() 
+		{
+			$where_data = " `".$this->field."` !=  ''";
+			$this->num = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$where_data."");
+		return $this->num;
+		}
 }
 
 ?>
