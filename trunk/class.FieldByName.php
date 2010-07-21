@@ -34,7 +34,8 @@ private $debug;
 			$where = "val='".doSlash($this->name)."'";
 			$rs = safe_row('name', 'txp_prefs', $where);
 		$this->field = rtrim($rs['name'], '_set');
-		return ($debug) ? dmp($this) : $this;		
+
+		return ($debug) ? dmp($this) : $this;
 		}
 
 /**
@@ -48,6 +49,7 @@ private $debug;
 		global $thisarticle;
 
 		assert_article();
+
 		return $thisarticle[strtolower($this->name)];
 		}
 
@@ -61,6 +63,7 @@ private $debug;
 		{
 			$where_data = " `".$this->field."` !=  ''";
 			$this->num = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$where_data."");
+
 		return $this->num;
 		}
 }
