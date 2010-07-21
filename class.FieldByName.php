@@ -36,16 +36,28 @@ private $debug;
 		$this->field = rtrim($rs['name'], '_set');
 		return ($debug) ? dmp($this) : $this;		
         }
-        
 /**
-* Returns an indexed array of values set in custom field named. 
+* Returns value set in custom field named per article from inside article form. 
 * function call obj->fieldData()
 * @return array
 */
 
-        function fieldData() {
+        function fieldData() 
+        {
+        global $thisarticle;
+        	assert_article();        	
+        return $thisarticle[strtolower($this->name)];
+        }
+
+/**
+* Returns an indexed array of values set in custom field named. 
+* function call obj->fieldsData()
+* @return array
+*/
+
+        function fieldsData() {
         	$where_data = " `".$this->field."` !=  ''";
-        	$this->num = getThings("SELECT ".$this->field." FROM `txptextpattern` WHERE ".$where_data."");
+        	$this->num = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$where_data."");
     		return $this->num;
         }
 }
