@@ -33,7 +33,12 @@ private $debug;
 
 			$where = "val='".doSlash($this->name)."'";
 			$rs = safe_row('name', 'txp_prefs', $where);
-		$this->field = rtrim($rs['name'], '_set');
+				if($rs) 
+				{
+
+				$this->field = rtrim($rs['name'], '_set');
+
+				} else { trigger_error(gTxt('name_not_found')); }
 
 		return ($debug) ? dmp($this) : $this;
 		}
