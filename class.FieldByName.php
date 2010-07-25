@@ -33,6 +33,7 @@ private $debug;
 
 			$where = "val='".doSlash($this->name)."'";
 			$rs = safe_row('name', 'txp_prefs', $where);
+
 				if($rs) 
 				{
 
