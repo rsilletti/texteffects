@@ -17,8 +17,8 @@
 * Class constructor is passed a field name as text 
 * and returns the textpattern table column name that
 * is associated with it.
-* @param custom field name as text
-* @return textpattern column name as text 
+* @param text custom field name.
+* @return text textpattern column name. 
 */
 
 class FieldByName {
@@ -45,9 +45,8 @@ private $debug;
 		}
 
 /**
-* Returns value set in custom field named per article from inside article form. 
 * function call obj->fieldData()
-* @return text
+* @return text Value set in custom field named per article from inside article form.
 */
 
 		function fieldData() 
@@ -60,9 +59,8 @@ private $debug;
 		}
 
 /**
-* Returns an indexed array of values set in custom field named. 
 * function call obj->fieldsData()
-* @return array
+* @return array Indexed array of values set in custom field named
 */
 
 		function fieldsData() 
@@ -77,8 +75,8 @@ private $debug;
 * Returns textpattern table data indexed by custom field named 
 * with active data per article from inside article form. 
 * function call obj->articleData()
-* @param textpattern table field name/names as comma delimited list, default is '', all.
-* @return array
+* @param string $col textpattern table field name/names as comma delimited list, default is '', all.
+* @return array Article data as set in column selection.
 */
 
 		function articleData($col="*") 
@@ -103,8 +101,8 @@ private $debug;
 /**
 * Returns textpattern table data indexed by custom field named with active data. 
 * function call obj->articlesData()
-* @param textpattern table field name/names as comma delimited list, default is '', all.
-* @return array
+* @param string $col textpattern table field name/names as comma delimited list, default is '', all.
+* @return array Article data as set in column selection.
 */
 
 		function articlesData($col="*") 
