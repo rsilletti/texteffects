@@ -2,8 +2,6 @@
 /**
 * Returns custom field names by textpattern table column relationship to name set in preferences.
 *
-* Copyright (C) 2010 Rick Silletti
-*
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
 * License as published by the Free Software Foundation; either
@@ -20,8 +18,6 @@
 * 02110-1301 USA
 *
 * rsilletti@gmail.com
-*
-* Rick Silletti, 1 April 1990
 *
 * @package txpcustom_fields
 */
