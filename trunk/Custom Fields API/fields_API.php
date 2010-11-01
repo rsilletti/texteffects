@@ -41,6 +41,7 @@ class FieldByName {
 
 private $name;
 private $debug;
+public $where_null;
 
 		function __construct($name, $debug=null)
 		{
@@ -54,6 +55,7 @@ private $debug;
 				{
 
 				$this->field = rtrim($rs['name'], '_set');
+				$this->where_null = " `".$this->field."` != '' ";
 
 				} else { trigger_error(gTxt('name_not_found')); }
 
@@ -81,8 +83,7 @@ private $debug;
 
 		function fieldsData() 
 		{
-			$where_data = " `".$this->field."` !=  ''";
-			$this->num = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$where_data."");
+			$this->num = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$this->where_null."");
 
 		return $this->num;
 		}
@@ -106,13 +107,11 @@ private $debug;
 		$txp_col[] = "*";
 
 		if(array_intersect(do_list($this->col_list), $txp_col) === do_list($this->col_list)) {
-			$where_data = " `".$this->field."` !=  ''";
-			$this->num = getRow("SELECT ".$this->col_list." FROM ".safe_pfx('textpattern')." WHERE ".$where_data." and ID = ".$thisarticle['thisid']."");
+			$this->num = getRow("SELECT ".$this->col_list." FROM ".safe_pfx('textpattern')." WHERE ".$this->where_null." and ID = ".$thisarticle['thisid']."");
 		} else { trigger_error(gTxt('column_not_found')); }
 
 		return $this->num;
 		}
-		
 
 /**
 * Returns textpattern table data indexed by custom field named with active data. 
@@ -128,12 +127,118 @@ private $debug;
 		$txp_col[] = "*";
 
 		if(array_intersect(do_list($this->col_list), $txp_col) === do_list($this->col_list)) {
-			$where_data = " `".$this->field."` !=  ''";
-			$this->num = getRows("SELECT ".$this->col_list." FROM ".safe_pfx('textpattern')." WHERE ".$where_data."");
+			$this->num = getRows("SELECT ".$this->col_list." FROM ".safe_pfx('textpattern')." WHERE ".$this->where_null."");
 		} else { trigger_error(gTxt('column_not_found')); }
 
 		return $this->num;
 		}
 }
 
+/**
+* Extended class is passed a field name as text 
+* and returns aggregate results by function calls of numeric field entries only.
+* Aggregates : SUM, COUNT, MAX, MIN, AVG. 
+* @param text custom field name.
+* @return text $name textpattern column name. 
+*/
+
+class AggregateByName extends FieldByName  {
+
+/**
+* Sum of number values in custom field column. 
+* function call obj->sumName()
+* @param boolean $debug return error text for non numeric entry in field if set to 1, default is false.
+* @return double
+*/        
+		function sumName($debug=null) {
+			$num = array();
+			$rs = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$this->where_null."");
+
+				foreach ($rs as $e) {
+					if (is_numeric($e)) {
+						$num[] = $e;
+					} else if ($debug) { trigger_error(gTxt('non_numeric_entry')); }			
+				}
+
+			return array_sum($num);
+		}
+
+/**
+* Count of number values in custom field column. 
+* function call obj->countName()
+* @param boolean $debug return error text for non numeric entry in field if set to 1, default is false.
+* @return integer
+*/         
+		function countName($debug=null) {
+			$num = array();
+			$rs = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$this->where_null."");
+
+				foreach ($rs as $e) {
+					if (is_numeric($e)) {
+						$num[] = $e;
+					} else if ($debug) { trigger_error(gTxt('non_numeric_entry')); }			
+				}
+
+			return count($num);
+		}
+
+/**
+* Minimum value in custom field column. 
+* function call obj->minName()
+* @param boolean $debug return error text for non numeric entry in field if set to 1, default is false.
+* @return double
+*/ 
+		function minName($debug=null) {
+			$num = array();
+			$rs = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$this->where_null."");
+
+				foreach ($rs as $e) {
+					if (is_numeric($e)) {
+						$num[] = $e;
+					} else if ($debug) { trigger_error(gTxt('non_numeric_entry')); }			
+				}
+				sort($num);
+
+			return $num[0];
+		}
+
+/**
+* Maximum value in custom field column. 
+* function call obj->maxName()
+* @param boolean $debug return error text for non numeric entry in field if set to 1, default is false.
+* @return double
+*/         
+		function maxName($debug=null) {
+			$num = array();
+			$rs = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$this->where_null."");
+
+				foreach ($rs as $e) {
+					if (is_numeric($e)) {
+						$num[] = $e;
+					} else if ($debug) { trigger_error(gTxt('non_numeric_entry')); }			
+				}
+				rsort($num);
+
+			return $num[0];
+		}
+
+/**
+* Average value in custom field column. 
+* function call obj->avgName()
+* @param boolean $debug return error text for non numeric entry in field if set to 1, default is false.
+* @return double
+*/ 
+		function avgName($debug=null) {
+			$num = array();
+			$rs = getThings("SELECT ".$this->field." FROM ".safe_pfx('textpattern')." WHERE ".$this->where_null."");
+
+				foreach ($rs as $e) {
+					if (is_numeric($e)) {
+						$num[] = $e;
+					} else if ($debug) { trigger_error(gTxt('non_numeric_entry')); }			
+				}
+
+			return (array_sum($num) / count($num));
+		}
+}
 ?>
