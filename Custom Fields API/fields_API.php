@@ -59,8 +59,15 @@ public $where_null;
 
 				} else { trigger_error(gTxt('name_not_found')); }
 
-		return ($debug) ? dmp($this) : $this;
-		}
+			if($debug) 
+			{
+
+				dmp($this);
+				$multi = safe_rows('name', 'txp_prefs', $where);
+				(sizeof($multi) > 1) ? trigger_error(gTxt('duplicate_fieldname')) : '';
+
+				} else { return $this; }
+			}
 
 /**
 * function call obj->fieldData()
