@@ -66,8 +66,8 @@ public $where_null;
 				$multi = safe_rows('name', 'txp_prefs', $where);
 				(sizeof($multi) > 1) ? trigger_error(gTxt('duplicate_fieldname')) : '';
 
-				} else { return $this; }
-			}
+			} else { return $this; }
+		}
 
 /**
 * function call obj->fieldData()
