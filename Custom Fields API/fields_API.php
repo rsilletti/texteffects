@@ -71,6 +71,7 @@ public $where_null;
 
 /**
 * function call obj->fieldData()
+* @global $thisarticle
 * @return text Value set in custom field named per article from inside article form.
 */
 
@@ -99,6 +100,7 @@ public $where_null;
 * Returns textpattern table data indexed by custom field named 
 * with active data per article from inside article form. 
 * function call obj->articleData()
+* @global $thisarticle
 * @param string $col textpattern table field name/names as comma delimited list, default is '', all.
 * @return array Article data as set in column selection.
 */
