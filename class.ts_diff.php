@@ -1,13 +1,24 @@
 <?php
-/**
-* @license http://www.gnu.org/licenses/licenses.html#GPL
-* @package txpdiff
-*/
 
 /**
 * Returns diff values in seconds between current server time
 * and values set to runtime arrays drawn from settings in the
 * database via static functions defined for each value.
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+* 02110-1301 USA
 *
 * @package txpdiff
 * @author Rick Silletti
@@ -19,6 +30,7 @@ abstract class ts_diff {
 /**
 * Article posting time diff to server current time. 
 * Static call ts_diff::apos_diff()
+* @global $thisarticle
 * @return integer   0 on failure
 */
  public static function apos_diff() {
@@ -36,6 +48,7 @@ abstract class ts_diff {
 /**
 * Article expiration time diff to server current time. 
 * Static call ts_diff::axpr_diff()
+* @global $thisarticle
 * @return integer   0 on failure
 */
  public static function axpr_diff() {
@@ -53,6 +66,7 @@ abstract class ts_diff {
 /**
 * Article modified time diff to server current time. 
 * Static call ts_diff::amdf_diff()
+* @global $thisarticle
 * @return integer   0 on failure
 */
  public static function amdf_diff() {
@@ -70,6 +84,7 @@ abstract class ts_diff {
 /**
 * Comment posting time diff to server current time. 
 * Static call ts_diff::cpos_diff()
+* @global $thiscomment
 * @return integer   0 on failure
 */
  public static function cpos_diff() {
@@ -87,6 +102,7 @@ abstract class ts_diff {
 /**
 * File creation time diff to server current time. 
 * Static call ts_diff::fpos_diff()
+* @global $thisfile
 * @return integer   0 on failure
 */
  public static function fpos_diff() {
@@ -104,6 +120,7 @@ abstract class ts_diff {
 /**
 * File modified time diff to server current time. 
 * Static call ts_diff::fmdf_diff()
+* @global $thisfile
 * @return integer   0 on failure
 */
  public static function fmdf_diff() {
@@ -121,6 +138,7 @@ abstract class ts_diff {
 /**
 * Link created time diff to server current time. 
 * Static call ts_diff::lpos_diff()
+* @global $thislink
 * @return integer   0 on failure
 */
  public static function lpos_diff() {
