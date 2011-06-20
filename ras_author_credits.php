@@ -215,7 +215,7 @@
 
 	function ras_author($atts)
 	{
-		global $thisarticle, $s, $thisauthor;
+	global $thisarticle, $s, $thisauthor;
 
 		extract(lAtts(array(
 			'link'         => '',
@@ -232,15 +232,14 @@
 
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
-		return ($link) ?
-			href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), ' rel="author"') : $author_name;
+	return ($link) ? href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), ' rel="author"') : $author_name;
 	}
 
 // -------------------------------------------------------------
 
 	function ras_user()
 	{
-		global $thisarticle,  $thisauthor, $author ;
+	global $thisarticle,  $thisauthor, $author ;
 
 		$author_name = $author;
 		$login_name = $thisarticle['authorid']; //?
@@ -250,7 +249,7 @@
 			$author_name = $thisauthor['name'];
 		}
 
-		return $author_name;
+	return $author_name;
 	}
 // -------------------------------------------------------------
 
@@ -258,10 +257,10 @@
 	{
 	global $thisauthor;
 	
-	ras_assert_author();
+		ras_assert_author();
 	
-	$where = "author='".$thisauthor['name']."'";
-	$rs = safe_row('COUNT(id)' , 'txp_file' , $where);
+		where = "author='".$thisauthor['name']."'";
+		$rs = safe_row('COUNT(id)' , 'txp_file' , $where);
 	
 	return $rs['COUNT(id)'];
 
@@ -272,10 +271,10 @@
 	{
 	global $thisauthor;
 	
-	ras_assert_author();
+		ras_assert_author();
 	
-	$where = "AuthorID='".$thisauthor['name']."'";
-	$rs = safe_row('COUNT(ID)' , 'textpattern' , $where);
+		$where = "AuthorID='".$thisauthor['name']."'";
+		$rs = safe_row('COUNT(ID)' , 'textpattern' , $where);
 	
 	return $rs['COUNT(ID)'];
 	}
@@ -286,10 +285,10 @@
 	{
 	global $thisauthor;
 
-	ras_assert_author();
+		ras_assert_author();
 
-	$where = "author='".$thisauthor['name']."'";
-	$rs = safe_row('COUNT(id)' , 'txp_image' , $where);
+		$where = "author='".$thisauthor['name']."'";
+		$rs = safe_row('COUNT(id)' , 'txp_image' , $where);
 	
 	return $rs['COUNT(id)'];
 	}
@@ -300,10 +299,10 @@
 	{
 	global $thisauthor;
 	
-	ras_assert_author();
+		ras_assert_author();
 	
-	$where = "author='".$thisauthor['name']."'";
-	$rs = safe_row('COUNT(id)' , 'txp_link' , $where);
+		$where = "author='".$thisauthor['name']."'";
+		$rs = safe_row('COUNT(id)' , 'txp_link' , $where);
 	
 	return $rs['COUNT(id)'];
 	}
@@ -312,7 +311,7 @@
 //--------------------------------------------------------------
 	function ras_assert_author() {
 	global $thisauthor;
-	if(empty($thisauthor))
+		if(empty($thisauthor))
 		trigger_error(gTxt('error_author_context'));
 	}
 
