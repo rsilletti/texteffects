@@ -18,14 +18,14 @@ function ras_author_list ($atts, $thing = NULL)
 		
 			foreach(do_list($type) as $num)
 				{
-				switch($num)
+				switch(strtolower($num))
 					{
-					case 'Publisher' : $privs[] = 1; break;
-					case 'Managing Editor' : $privs[] = 2; break;
-					case 'Copy Editor' : $privs[] = 3; break;
-					case 'Staff writer' : $privs[] = 4; break;
-					case 'Freelancer' : $privs[] = 5; break;
-					case 'Designer' : $privs[] = 6; break;
+					case 'publisher' : $privs[] = 1; break;
+					case 'managing editor' : $privs[] = 2; break;
+					case 'copy editor' : $privs[] = 3; break;
+					case 'staff writer' : $privs[] = 4; break;
+					case 'freelancer' : $privs[] = 5; break;
+					case 'designer' : $privs[] = 6; break;
 					case '0' : $privs[] = 0; break;
 					case '1' : $privs[] = 1; break;
 					case '2' : $privs[] = 2; break;
@@ -36,6 +36,7 @@ function ras_author_list ($atts, $thing = NULL)
 					case '7' : $privs[] = 7; break;
 					case '8' : $privs[] = 8; break;
 					case '9' : $privs[] = 9; break;
+					default	 : trigger_error(gTxt('error_type_attribute: '.$num));
 					}
 				}
 		
@@ -126,10 +127,9 @@ function ras_author_list ($atts, $thing = NULL)
 
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
-		return ($link) ?
-			href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) :
-			$author_name;
+		return ($link) ? href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) : $author_name;
 	}
+
 // -------------------------------------------------------------
 
 	function ras_user()
@@ -164,7 +164,7 @@ function ras_author_list ($atts, $thing = NULL)
 //--------------------------------------------------------------
   	function assert_author() {
          global $thisauthor;
-		    if (empty($thisauthor))
+		    if(empty($thisauthor))
               trigger_error(gTxt('error_author_context'));
       }
 

@@ -61,6 +61,7 @@
 					case '7' : $privs[] = 7; break;
 					case '8' : $privs[] = 8; break;
 					case '9' : $privs[] = 9; break;
+					default	 : trigger_error(gTxt('error_type_attribute: '.$num));
 					}
 				}
 
@@ -103,6 +104,7 @@
 							case 'links'    : $option[] = ras_linkcount(); break;
 							case 'files'    : $option[] = ras_filecount(); break;
 							case 'images'   : $option[] = ras_imagecount(); break;
+							default         : { $option[] = NULL; trigger_error(gTxt('error_rank_by_attribute: '.$rank)); } 
 						}
 					}
 					 
@@ -115,7 +117,7 @@
 					{
 						$option[] = NULL;
 					}
-					
+	
 				$data[] = array('firstcount' => $option[0] , 'nextcount' => $option[1], 'lastcount' => $option[2], 'thehtml' => ($link) ? href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) : $author_name);
 				}
 			}
@@ -143,6 +145,7 @@
 							case 'links'    : $option[] = ras_linkcount(); break;
 							case 'files'    : $option[] = ras_filecount(); break;
 							case 'images'   : $option[] = ras_imagecount(); break;
+							default         : { $option[] = NULL; trigger_error(gTxt('error_rank_by_attribute: ').$rank); }
 						}
 					}
 					 
@@ -229,13 +232,14 @@
 			case 16 : $select = (safe_count('txp_image', $where_content) || safe_count('txp_file', $where_content) || safe_count('textpattern', $where_author)) ; break;
 				// 17 true if an article has been posted and an image uploaded and a file uploaded
 			case 17 : $select = (safe_count('txp_image', $where_content) && safe_count('txp_file', $where_content) && safe_count('textpattern', $where_author)) ; break;
+			default : trigger_error(gTxt('error_select_by_attribute_out_of_range: '.$selection));
 		}
 	return $select;
 	}
 
 // -------------------------------------------------------------
 
-	function ras_author($atts)
+	function ras_authors($atts)
 	{
 	global $thisarticle, $s, $thisauthor;
 
@@ -259,7 +263,7 @@
 
 // -------------------------------------------------------------
 
-	function ras_user()
+	function ras_users()
 	{
 		global $thisarticle,  $thisauthor, $author ;
 
