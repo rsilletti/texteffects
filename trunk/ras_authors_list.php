@@ -108,36 +108,47 @@ function ras_author_list ($atts, $thing = NULL)
 }
 // -------------------------------------------------------------
 
-	function ras_author($atts)
+	function ras_authors($atts)
 	{
-		global $thisarticle, $s, $thisauthor;
+	global $thisarticle, $s, $thisauthor;
 
 		extract(lAtts(array(
 			'link'         => '',
+			'title'        => 1,
 			'section'      => '',
 			'this_section' => 0,
 		), $atts));
 
 		$author_name = get_author_name($thisarticle['authorid']);
+
 		
 		if (!empty($thisauthor['realname']))
 		{
 			$author_name = $thisauthor['realname'];
 		}
 
+		
+		if($thisarticle)
+		{
+			$display_name = htmlspecialchars( ($title) ? $author_name : $thisarticle['authorid'] );
+		}
+		else
+		{
+			$display_name = htmlspecialchars( ($title) ? $author_name : $thisauthor['name'] );
+		}
+
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
-		return ($link) ? href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) : $author_name;
+	return ($link) ? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), ' rel="author"') : $display_name;
 	}
 
 // -------------------------------------------------------------
 
 	function ras_user()
 	{
-		global $thisarticle,  $thisauthor, $author ;
+		global $thisauthor, $author ;
 
 		$author_name = $author;
-		$login_name = $thisarticle['authorid']; //?
 		
 		if (!empty($thisauthor['name']))
 		{
