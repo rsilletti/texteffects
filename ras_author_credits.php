@@ -12,8 +12,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * Lesser General Public License for more details.
 *
-* You should have received a copy of the GNU Lesser General Public
-* License along with this library; if not, write to the Free Software
+* To received a copy of the GNU Lesser General Public
+* License write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 * 02110-1301 USA
 *
@@ -166,6 +166,9 @@
 		}
 		$thisauthor = (isset($old_author) ? $old_author : NULL);
 
+		if(!empty($data)) 
+		{
+		
 		foreach ($data as $key => $row) {
 			$firstcount[$key]  = $row['firstcount'];
 			$nextcount[$key] = $row['nextcount'];
@@ -177,6 +180,7 @@
 		array_multisort($firstcount, SORT_DESC, $thehtml, SORT_ASC, $data) :
 		array_multisort($firstcount, SORT_DESC, $nextcount, SORT_DESC, $lastcount, SORT_DESC, $data);
 
+		}
 					foreach($data as $row) 
 					{
 						$out[] = $row['thehtml'];
