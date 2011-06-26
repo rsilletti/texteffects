@@ -171,8 +171,7 @@
 			}
 		}
 		$thisauthor = (isset($old_author) ? $old_author : NULL);
-	(is_string($option[0])) ? dmp("testin") : dmp("testout");
-	dmp($option[0]);
+
 		if(!empty($data))
 		{
 		foreach ($data as $key => $row) {
