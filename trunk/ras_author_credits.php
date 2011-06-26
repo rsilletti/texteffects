@@ -12,8 +12,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * Lesser General Public License for more details.
 *
-* To received a copy of the GNU Lesser General Public
-* License write to the Free Software
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 * 02110-1301 USA
 *
@@ -35,6 +35,7 @@
 			'section'      => '',
 			'this_section' => 0,
 			'link'         => 1,
+			'title'        => 1,
 			'active_only'  => 1,
 			'select_by'    => 1,
 			'rank_by'      => 'articles',
@@ -95,15 +96,17 @@
 						extract(safe_row('RealName, name', 'txp_users', $where));
 						$thisauthor['name'] = $name;
 						$author_name = safe_field('RealName', 'txp_users', $where);
+						$display_name = htmlspecialchars( ($title) ? $author_name : $thisauthor['name'] );
 						$option = array();
 
 					foreach(do_list($rank_by) as $rank) {
 						switch(strtolower($rank))
 						{
-							case 'articles' : $option[] = ras_articlecount(); break;
-							case 'links'    : $option[] = ras_linkcount(); break;
-							case 'files'    : $option[] = ras_filecount(); break;
-							case 'images'   : $option[] = ras_imagecount(); break;
+							case 'articles' : $option[] = intval(ras_articlecount()); break;
+							case 'links'    : $option[] = intval(ras_linkcount()); break;
+							case 'files'    : $option[] = intval(ras_filecount()); break;
+							case 'images'   : $option[] = intval(ras_imagecount()); break;
+							case 'authors'  : $option[] = $display_name; break;
 							default         : { $option[] = NULL; trigger_error(gTxt('error_rank_by_attribute: '.$rank)); } 
 						}
 					}
@@ -118,7 +121,7 @@
 						$option[] = NULL;
 					}
 	
-				$data[] = array('firstcount' => $option[0] , 'nextcount' => $option[1], 'lastcount' => $option[2], 'thehtml' => ($link) ? href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) : $author_name);
+				$data[] = array('firstcount' => $option[0] , 'nextcount' => $option[1], 'lastcount' => $option[2], 'thename' => $display_name, 'thehtml' => ($link) ? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) : $display_name);
 				}
 			}
 		}
@@ -136,15 +139,18 @@
 					extract(safe_row('RealName, name', 'txp_users', $where));
 					$thisauthor['realname'] = $RealName;
 					$thisauthor['name'] = $name;
+					$author_name = safe_field('RealName', 'txp_users', $where);
+					$display_name = htmlspecialchars( ($title) ? $author_name : $thisauthor['name'] );
 					$option = array();
 
 					foreach(do_list($rank_by) as $rank) {
 						switch(strtolower($rank))
 						{
-							case 'articles' : $option[] = ras_articlecount(); break;
-							case 'links'    : $option[] = ras_linkcount(); break;
-							case 'files'    : $option[] = ras_filecount(); break;
-							case 'images'   : $option[] = ras_imagecount(); break;
+							case 'articles' : $option[] = intval(ras_articlecount()); break;
+							case 'links'    : $option[] = intval(ras_linkcount()); break;
+							case 'files'    : $option[] = intval(ras_filecount()); break;
+							case 'images'   : $option[] = intval(ras_imagecount()); break;
+							case 'authors'  : $option[] = $display_name; break;
 							default         : { $option[] = NULL; trigger_error(gTxt('error_rank_by_attribute: ').$rank); }
 						}
 					}
@@ -159,27 +165,28 @@
 						$option[] = NULL;
 					}
 
-				$data[] = array('firstcount' => $option[0] , 'nextcount' => $option[1], 'lastcount' => $option[2], 'thehtml' => ($thing) ? parse($thing) : parse_form($form) );
+				$data[] = array('firstcount' => $option[0] , 'nextcount' => $option[1], 'lastcount' => $option[2], 'thename' => $display_name, 'thehtml' => ($thing) ? parse($thing) : parse_form($form) );
 				}
 			}
 			}
 		}
 		$thisauthor = (isset($old_author) ? $old_author : NULL);
-
-		if(!empty($data)) 
+	(is_string($option[0])) ? dmp("testin") : dmp("testout");
+	dmp($option[0]);
+		if(!empty($data))
 		{
-		
 		foreach ($data as $key => $row) {
 			$firstcount[$key]  = $row['firstcount'];
 			$nextcount[$key] = $row['nextcount'];
 			$lastcount[$key] = $row['lastcount'];
+			$thename[$key] = $row['thename'];
 			$thehtml[$key] = $row['thehtml'];
 		}
-		
-		($option['1'] == NULL) ?
-		array_multisort($firstcount, SORT_DESC, $thehtml, SORT_ASC, $data) :
-		array_multisort($firstcount, SORT_DESC, $nextcount, SORT_DESC, $lastcount, SORT_DESC, $data);
 
+		($option['1'] == NULL) ?
+		array_multisort($firstcount, (is_string($option[0])) ? SORT_ASC : SORT_DESC , $thename, SORT_ASC, $data) :
+		array_multisort($firstcount, (is_string($option[0])) ? SORT_ASC : SORT_DESC , $nextcount, (is_string($option[1])) ? SORT_ASC : SORT_DESC, $lastcount, (is_string($option[2])) ? SORT_ASC : SORT_DESC, $data);
+		
 		}
 					foreach($data as $row) 
 					{
@@ -249,7 +256,7 @@
 
 		extract(lAtts(array(
 			'link'         => '',
-			'title'        => 1,
+			'title'		   => 1,
 			'section'      => '',
 			'this_section' => 0,
 		), $atts));
@@ -277,7 +284,7 @@
 
 // -------------------------------------------------------------
 
-	function ras_users()
+	function ras_users() // back compatabilty
 	{
 		global $thisauthor, $author ;
 
