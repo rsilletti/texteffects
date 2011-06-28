@@ -93,11 +93,16 @@
 			{
 				if(in_array($author_priv , $privs))
 				{
-						extract(safe_row('RealName, name', 'txp_users', $where));
-						$thisauthor['name'] = $name;
-						$author_name = safe_field('RealName', 'txp_users', $where);
-						$display_name = htmlspecialchars( ($title) ? $author_name : $thisauthor['name'] );
-						$option = array();
+					extract(safe_row('RealName,name,email,privs as level,last_access', 'txp_users', $where));
+					$thisauthor['realname'] = $RealName;
+					$thisauthor['name'] = $name;
+					$thisauthor['email'] = $email;
+					$thisauthor['privs'] = $level;
+					$thisauthor['last_access'] = $last_access;
+
+					$display_name = htmlspecialchars( ($title) ? $thisauthor['realname'] : $thisauthor['name'] );
+						
+					$option = array();
 
 					foreach(do_list($rank_by) as $rank) {
 						switch(strtolower($rank))
@@ -121,12 +126,12 @@
 						$option[] = NULL;
 					}
 	
-				$data[] = array('firstcount' => $option[0] , 'nextcount' => $option[1], 'lastcount' => $option[2], 'thename' => $display_name, 'thehtml' => ($link) ? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) : $display_name);
+				$data[] = array('firstcount' => $option[0] , 'nextcount' => $option[1], 'lastcount' => $option[2], 'thename' => $display_name, 'thehtml' => ($link) ? href($display_name, pagelinkurl(array('s' => $section, 'author' => $thisauthor['realname']))) : $display_name);
 				}
 			}
-		}
-		else
-		{
+			}
+			else
+			{
 				$where_author = "AuthorID='".$row['name']."'";
 				$where_content = "author='".$row['name']."'";
 
@@ -136,11 +141,15 @@
 			{
 				if(in_array($author_priv , $privs))
 				{
-					extract(safe_row('RealName, name', 'txp_users', $where));
+					extract(safe_row('RealName,name,email,privs as level,last_access', 'txp_users', $where));
 					$thisauthor['realname'] = $RealName;
 					$thisauthor['name'] = $name;
-					$author_name = safe_field('RealName', 'txp_users', $where);
-					$display_name = htmlspecialchars( ($title) ? $author_name : $thisauthor['name'] );
+					$thisauthor['email'] = $email;
+					$thisauthor['privs'] = $level;
+					$thisauthor['last_access'] = $last_access;
+
+					$display_name = htmlspecialchars( ($title) ? $thisauthor['realname'] : $thisauthor['name'] );
+					
 					$option = array();
 
 					foreach(do_list($rank_by) as $rank) {
@@ -283,18 +292,125 @@
 
 // -------------------------------------------------------------
 
-	function ras_users() // back compatabilty
+	function ras_author_info($atts, $thing = NULL)
 	{
-		global $thisauthor, $author ;
-
-		$author_name = $author;
+	global $thisauthor;
+	
+		extract(lAtts(array(
+			'author_name'    => $thisauthor['realname'],
+			'title'          => 1,
+			'link'           => 0,
+			'wraptag'        => 'p',
+			'class'          => __FUNCTION__
+		), $atts));
+				
+		$where = "RealName='".$author_name."'";
 		
-		if (!empty($thisauthor['name']))
+		$old_author = $thisauthor;
+		
+		extract(safe_row('RealName,name,email,privs as level,last_access', 'txp_users', $where));
+		$thisauthor['realname'] = $author_name;
+		$thisauthor['name'] = $name;
+		$thisauthor['email'] = $email;
+		$thisauthor['privs'] = $level;
+		$thisauthor['last_access'] = $last_access;
+
+		$display_name = htmlspecialchars( ($title) ? $author_name : $name );
+
+		if(empty($form) && empty($thing))
 		{
-			$author_name = $thisauthor['name'];
+			$out = ($link) ? href($display_name, pagelinkurl(array('author' => $author_name)), ' rel="author"') : $display_name;
+		}
+		else
+		{
+			$out = ($thing) ? parse($thing) : parse_form($form);
+		}
+		
+		$thisauthor = (isset($old_author) ? $old_author : NULL);
+		
+		return doTag($out, $wraptag, $class);
+	}
+
+// -------------------------------------------------------------
+
+	function ras_author_role($atts)
+	{
+	global $thisauthor;
+	
+		extract(lAtts(array(
+			'wraptag'        => '',
+			'class'          => __FUNCTION__
+		), $atts));
+	
+		ras_assert_author();
+	
+		switch($thisauthor['privs'])
+		{
+			case '1' : $out = "Publisher"; break;
+			case '2' : $out = "Managing Editor"; break;
+			case '3' : $out = "Copy Editor"; break;
+			case '4' : $out = "Staff Writer"; break;
+			case '5' : $out = "Freelancer"; break;
+			case '6' : $out = "Designer"; break;
+		}
+		
+		return doTag($out, $wraptag, $class);
+	}
+
+// -------------------------------------------------------------
+
+	function ras_last_login($atts)
+	{
+	global $thisauthor, $dateformat;
+			
+		extract(lAtts(array(
+			'class'   => '',
+			'format'  => '',
+			'gmt'     => '',
+			'lang'    => '',
+			'wraptag' => ''
+		), $atts));
+		
+		ras_assert_author();
+		
+		if ($format)
+		{
+			$out = safe_strftime($format, strtotime($thisauthor['last_access']), $gmt, $lang);
+		}
+		else			
+		{
+			$out = safe_strftime($dateformat, strtotime($thisauthor['last_access']));
 		}
 
-		return $author_name;
+		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
+	}
+
+// -------------------------------------------------------------
+
+	function ras_author_mailto($atts, $thing = NULL)
+	{
+	global $thisauthor;
+	
+		extract(lAtts(array(
+			'email'   => $thisauthor['email'],
+			'linktext' => gTxt('contact'),
+			'title'     => '',
+		), $atts));
+		
+		ras_assert_author();
+		
+		return email(array('email' => $email, 'linktext' => $linktext, 'title' => $title), $thing);
+		
+		
+	}
+
+// -------------------------------------------------------------
+
+	function ras_email_text()
+	{
+	global $thisauthor;
+	
+	return $thisauthor['email'];
 	}
 // -------------------------------------------------------------
 
