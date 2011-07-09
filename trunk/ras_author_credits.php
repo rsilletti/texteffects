@@ -22,14 +22,16 @@
 */
 
 
-				if(getThing("select * from `".PFX."txp_lang` where name='publisher' and event='admin'")){
-					safe_update('txp_lang', "event='common'", "    name='publisher' 
-																or name='managing_editor' 
-																or name='copy_editor' 
-																or name='staff_writer' 
-																or name='freelancer' 
-																or name='designer'" );
-				}
+	if(getThing("select * from `".PFX."txp_lang` where name='publisher' and event='admin'"))
+	{
+		safe_update('txp_lang', "event='common'", 
+						" name='publisher' 
+						or name='managing_editor' 
+						or name='copy_editor' 
+						or name='staff_writer' 
+						or name='freelancer' 
+						or name='designer'" );
+	}
 
 
 	function ras_author_credits($atts, $thing = NULL) 
