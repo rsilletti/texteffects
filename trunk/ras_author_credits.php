@@ -21,6 +21,17 @@
 *
 */
 
+
+				if(getThing("select * from `".PFX."txp_lang` where name='publisher' and event='admin'")){
+					safe_update('txp_lang', "event='common'", "    name='publisher' 
+																or name='managing_editor' 
+																or name='copy_editor' 
+																or name='staff_writer' 
+																or name='freelancer' 
+																or name='designer'" );
+				}
+
+
 	function ras_author_credits($atts, $thing = NULL) 
 	{
 	global $s, $thisauthor;
@@ -31,7 +42,7 @@
 			'sort'         => 'user_id desc',
 			'form'        => '',
 			'wraptag'      => '',
-			'type'         => 'Publisher,Managing Editor,Copy Editor,Staff writer,Freelancer,Designer',
+			'type'         => '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19',
 			'section'      => '',
 			'this_section' => 0,
 			'link'         => 1,
@@ -41,7 +52,7 @@
 			'rank_by'      => 'articles',
 			'class'        => __FUNCTION__
 		), $atts));
-		
+
 			foreach(do_list($type) as $num)
 				{
 				switch(strtolower($num))
@@ -62,6 +73,16 @@
 					case '7' : $privs[] = 7; break;
 					case '8' : $privs[] = 8; break;
 					case '9' : $privs[] = 9; break;
+					case '10' : $privs[] = 10; break;
+					case '11' : $privs[] = 11; break;
+					case '12' : $privs[] = 12; break;
+					case '13' : $privs[] = 13; break;
+					case '14' : $privs[] = 14; break;
+					case '15' : $privs[] = 15; break;
+					case '16' : $privs[] = 16; break;
+					case '17' : $privs[] = 17; break;
+					case '18' : $privs[] = 18; break;
+					case '19' : $privs[] = 19; break;
 					default	 : trigger_error(gTxt('error_type_attribute: '.$num));
 					}
 				}
@@ -125,7 +146,7 @@
 					{
 						$option[] = NULL;
 					}
-	
+
 				$data[] = array('firstcount' => $option[0] , 'nextcount' => $option[1], 'lastcount' => $option[2], 'thename' => $display_name, 'thehtml' => ($link) ? href($display_name, pagelinkurl(array('s' => $section, 'author' => $thisauthor['realname']))) : $display_name);
 				}
 			}
@@ -194,7 +215,7 @@
 		($option['1'] == NULL) ?
 		array_multisort($firstcount, (is_string($option[0])) ? SORT_ASC : SORT_DESC , $thename, SORT_ASC, $data) :
 		array_multisort($firstcount, (is_string($option[0])) ? SORT_ASC : SORT_DESC , $nextcount, (is_string($option[1])) ? SORT_ASC : SORT_DESC, $lastcount, (is_string($option[2])) ? SORT_ASC : SORT_DESC, $data);
-		
+
 		}
 					foreach($data as $row) 
 					{
@@ -305,9 +326,9 @@
 		), $atts));
 				
 		$where = "RealName='".$author_name."'";
-		
+
 		$old_author = $thisauthor;
-		
+
 		extract(safe_row('RealName,name,email,privs as level,last_access', 'txp_users', $where));
 		$thisauthor['realname'] = $author_name;
 		$thisauthor['name'] = $name;
@@ -327,7 +348,7 @@
 		}
 		
 		$thisauthor = (isset($old_author) ? $old_author : NULL);
-		
+
 		return doTag($out, $wraptag, $class);
 	}
 
@@ -336,24 +357,32 @@
 	function ras_author_role($atts)
 	{
 	global $thisauthor;
-	
 		extract(lAtts(array(
 			'wraptag'        => '',
 			'class'          => __FUNCTION__
 		), $atts));
-	
+
 		ras_assert_author();
-	
-		switch($thisauthor['privs'])
-		{
-			case '1' : $out = "Publisher"; break;
-			case '2' : $out = "Managing Editor"; break;
-			case '3' : $out = "Copy Editor"; break;
-			case '4' : $out = "Staff Writer"; break;
-			case '5' : $out = "Freelancer"; break;
-			case '6' : $out = "Designer"; break;
+
+		if (getThings("show tables like '".PFX."smd_um_groups'")) {
+			$where_level = "id='".$thisauthor['privs']."'";		
+			extract(safe_row('name', 'smd_um_groups', $where_level));
+			$out = gTxt($name);				
 		}
-		
+		else
+		{
+			switch($thisauthor['privs'])
+			{
+			case '0' : $out = gTxt('none'); break;
+			case '1' : $out = gTxt('publisher'); break;
+			case '2' : $out = gTxt('managing_editor'); break;
+			case '3' : $out = gTxt('copy_editor'); break;
+			case '4' : $out = gTxt('staff_writer'); break;
+			case '5' : $out = gTxt('freelancer'); break;
+			case '6' : $out = gTxt('designer'); break;
+			}
+		}
+
 		return doTag($out, $wraptag, $class);
 	}
 
@@ -390,18 +419,18 @@
 	function ras_author_mailto($atts, $thing = NULL)
 	{
 	global $thisauthor;
-	
+
 		extract(lAtts(array(
 			'email'   => $thisauthor['email'],
 			'linktext' => gTxt('contact'),
 			'title'     => '',
 		), $atts));
-		
+
 		ras_assert_author();
-		
+
 		return email(array('email' => $email, 'linktext' => $linktext, 'title' => $title), $thing);
-		
-		
+
+
 	}
 
 // -------------------------------------------------------------
@@ -472,9 +501,10 @@
 	function ras_assert_author() 
 	{
 	global $thisauthor;
-	
+
 		if(empty($thisauthor))
 		trigger_error(gTxt('error_author_context'));
 	}
+
 
 ?>
