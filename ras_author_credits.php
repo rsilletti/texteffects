@@ -21,19 +21,6 @@
 *
 */
 
-
-	if(getThing("select * from `".PFX."txp_lang` where name='publisher' and event='admin'"))
-	{
-		safe_update('txp_lang', "event='common'", 
-						" name='publisher' 
-						or name='managing_editor' 
-						or name='copy_editor' 
-						or name='staff_writer' 
-						or name='freelancer' 
-						or name='designer'" );
-	}
-
-
 	function ras_author_credits($atts, $thing = NULL) 
 	{
 	global $s, $thisauthor;
@@ -358,7 +345,7 @@
 
 	function ras_author_role($atts)
 	{
-	global $thisauthor;
+	global $thisauthor, $lang;
 		extract(lAtts(array(
 			'wraptag'        => '',
 			'class'          => __FUNCTION__
@@ -369,21 +356,23 @@
 		if (getThings("show tables like '".PFX."smd_um_groups'")) {
 			$where_level = "id='".$thisauthor['privs']."'";		
 			extract(safe_row('name', 'smd_um_groups', $where_level));
-			$out = gTxt($name);				
+			$data = $name;				
 		}
 		else
 		{
 			switch($thisauthor['privs'])
 			{
-			case '0' : $out = gTxt('none'); break;
-			case '1' : $out = gTxt('publisher'); break;
-			case '2' : $out = gTxt('managing_editor'); break;
-			case '3' : $out = gTxt('copy_editor'); break;
-			case '4' : $out = gTxt('staff_writer'); break;
-			case '5' : $out = gTxt('freelancer'); break;
-			case '6' : $out = gTxt('designer'); break;
+			case '0' : $data = 'none'; break;
+			case '1' : $data = 'publisher'; break;
+			case '2' : $data = 'managing_editor'; break;
+			case '3' : $data = 'copy_editor'; break;
+			case '4' : $data = 'staff_writer'; break;
+			case '5' : $data = 'freelancer'; break;
+			case '6' : $data = 'designer'; break;
 			}
 		}
+			$where_lang = "lang='".lang()."' and name='".$data."'";
+			$out = safe_field('data', 'txp_lang', $where_lang);
 
 		return doTag($out, $wraptag, $class);
 	}
